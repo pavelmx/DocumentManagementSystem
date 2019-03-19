@@ -1,0 +1,27 @@
+drop table role;
+drop table user;
+drop table user_role;
+drop table document;
+
+
+create table role(id bigint auto_increment, name varchar(255));
+create table user(id bigint auto_increment,activation_code varchar(255), name varchar(50), email varchar(50), password varchar(500), username varchar(20));
+create table user_role(id_user bigint, id_role bigint);
+create table document(id bigint auto_increment, title varchar(255), DATE_OF_CREATION date, CONTRACT_TERM integer, DOCUMENT_DESCRIPTION varchar(255),
+FILE varbinary(255), CUSTOMER varchar(255), EXPIRED boolean, ID_USER bigint );
+
+
+insert into role(name) values('ROLE_USER');
+insert into role(name) values('ROLE_ADMIN');
+
+
+insert into user(activation_code ,name, email,password, username) values(null, 'peter', 'peter@email', '$2y$10$GvvRi6LKC4SXMqesmWvCzeFxUMGAZVuX1nl9DFVN2uLJBz.gMG3Ty', 'peter_big');
+insert into user(activation_code ,name, email,password, username) values(null, 'admin', 'admin@email', '$2y$10$GvvRi6LKC4SXMqesmWvCzeFxUMGAZVuX1nl9DFVN2uLJBz.gMG3Ty', 'admin');
+
+
+insert into user_role(id_user, id_role ) values(1, 1);
+insert into user_role(id_user, id_role ) values(2, 2);
+
+
+insert into document(TITLE,DATE_OF_CREATION ,CONTRACT_TERM ,DOCUMENT_DESCRIPTION ,CUSTOMER ,EXPIRED ,ID_USER  )
+values('document1', '2019-03-17', 10, 'this document about me',  'customer from bristol', false, 1);
