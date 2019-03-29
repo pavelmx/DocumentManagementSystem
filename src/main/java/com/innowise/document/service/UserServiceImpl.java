@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityExistsException;
 import java.util.*;
 
 @Service
@@ -43,30 +44,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     MailSenderServiceImpl mailSenderService;
 
-
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public User getById(Long id) {
         return userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User with id = " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException("User with id:'" + id + "' not found."));
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public User findUserByUsername(String username){
         return userRepo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User with username = " + username + " not found."));
+                .orElseThrow(() -> new RuntimeException("User with username: '" + username + "' not found."));
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public User findUserByEmail(String email) {
         return userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User with email = " + email + " not found."));
+                .orElseThrow(() -> new RuntimeException("User with email: '" + email + "' not found."));
     }
 
-    @Override
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
         userRepo.findAll().forEach(users::add);
@@ -74,7 +71,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteById(Long id) {
         userRepo.deleteById(id);
     }
@@ -95,7 +91,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUser(User user){
+        if (!existsById(user.getId())){
+            throw new EntityExistsException("User with id: '" + user.getId() + "' not found.");
+        }
+        return userRepo.save(user);
+    }
+
+    @Override
     public User signUpUser(RegisterForm signup){
+        if(existsByUsername(signup.getUsername()))
+            throw new EntityExistsException("User with username: '" + signup.getUsername() + "' exists.");
+        if(existsByEmail(signup.getEmail()))
+            throw new EntityExistsException("User with email: '" + signup.getEmail() + "' exists.");
+
         User newuser = new User(signup.getUsername(), encoder.encode(signup.getPassword()),
                                 signup.getEmail(), signup.getName());
         Set<Role> roles = new HashSet<>();
@@ -109,7 +118,6 @@ public class UserServiceImpl implements UserService {
                     "Please confirm your mail: http://localhost:8080/auth/activate/" + newuser.getActivationCode();
             mailSenderService.send(newuser.getEmail(), "Activation code", message);
         }
-
         return newuser;
     }
 
@@ -117,23 +125,36 @@ public class UserServiceImpl implements UserService {
     public JwtResponse logInUser(LoginForm login){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         String jwt = jwtProvider.generateJwtToken(authentication);
         UserDetails user = (UserDetails) authentication.getPrincipal();
-        return new JwtResponse(jwt, user.getUsername(), user.getAuthorities());
+        if(user.isAccountNonLocked())
+            return new JwtResponse(jwt, user.getUsername(), user.getAuthorities());
+        else
+            return null;
     }
 
     @Override
     public boolean activateUser(String code){
         User user = userRepo.findByActivationCode(code).get();
-
         if (user == null) {
             return false;
         }
         user.setActivationCode(null);
         userRepo.save(user);
         return true;
+    }
+
+    private List<User> getAllUsersByRoleUser(){
+        Set<Role> roles = new HashSet<>();
+        roles.add(roleService.findByName(RoleName.ROLE_USER));
+        List<User> users = userRepo.findByRoles(roles);
+        return users;
+    }
+
+    @Override
+    public void deleteAll(){
+        List<User> users = getAllUsersByRoleUser();
+        users.forEach(user -> deleteById(user.getId()));
     }
 }

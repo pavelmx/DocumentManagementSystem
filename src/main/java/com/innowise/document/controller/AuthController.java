@@ -39,7 +39,6 @@ public class AuthController {
     @GetMapping("/activate/{code}")
     public ResponseEntity<?> activate(@PathVariable String code) {
          boolean isActivated = userService.activateUser(code);
-
         if (isActivated) {
             return new ResponseEntity<>(new ResponseMessage("User successfully activated"), HttpStatus.OK);
         } else {

@@ -1,25 +1,15 @@
 package com.innowise.document.controller;
 
-import com.innowise.document.entity.Role;
-import com.innowise.document.entity.RoleName;
 import com.innowise.document.entity.User;
-import com.innowise.document.repository.UserRepo;
-import com.innowise.document.security.JwtResponse;
-import com.innowise.document.security.LoginForm;
-import com.innowise.document.security.RegisterForm;
-import com.innowise.document.security.ResponseMessage;
-import com.innowise.document.service.RoleService;
 import com.innowise.document.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -28,12 +18,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    UserRepo userRepo;
-
-    @Autowired
-    RoleService roleService;
 
     @GetMapping("get/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id) {
@@ -47,11 +31,13 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("email/{email}")
     public ResponseEntity<User> findUserByEmail(@PathVariable("email") String email) {
         User user = userService.findUserByEmail(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
 
     @GetMapping("getall")
     public ResponseEntity<List<User>> getAll() {
@@ -61,14 +47,22 @@ public class UserController {
     }
 
     @PutMapping("update")
-    public ResponseEntity<?> updateUser(User user) {
-        return null;
+    public ResponseEntity<User> updateUser(User user) {
+        User upuser = userService.updateUser(user);
+        return new ResponseEntity<>(upuser, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         userService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("deleteall")
+    public ResponseEntity<Void> deleteAll() {
+        userService.deleteAll();
+        return new ResponseEntity<>( HttpStatus.OK);
+    }
 }

@@ -53,8 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 authorizeRequests()
                 .antMatchers("/auth/**", "/activate/*").permitAll()
                 .anyRequest().authenticated()
-                .and().logout()    //logout configuration
-                .logoutUrl("/logout")
                 .and().rememberMe().key("${auth.jwtSecret}")
                 .and().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

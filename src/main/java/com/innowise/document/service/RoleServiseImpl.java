@@ -19,7 +19,7 @@ public class RoleServiseImpl implements RoleService {
     @Override
     public Role findByName(RoleName name){
         return roleRepo.findByName(name)
-                .orElseThrow(() -> new RuntimeException("Role with name = " + name + " not found."));
+                .orElseThrow(() -> new RuntimeException("Role with name: '" + name + "' not found."));
     }
 
     @Override
@@ -32,7 +32,7 @@ public class RoleServiseImpl implements RoleService {
     @Override
     public Role getById(Long id){
         return roleRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role with id = " + id + " not found."));
+                .orElseThrow(() -> new RuntimeException("Role with id: '" + id + "' not found."));
     }
 
     @Override

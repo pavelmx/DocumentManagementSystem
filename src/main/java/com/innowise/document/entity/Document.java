@@ -1,13 +1,8 @@
 package com.innowise.document.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.format.annotation.DateTimeFormat;
+
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -26,32 +21,42 @@ public class Document implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "id_user")
-
     private User user;
 
     private String documentDescription;
 
     private String customer;
 
-    private Integer contractTerm;  //count month
+    private String filename;
 
-    private byte[] file;
+    private Integer contractTerm;  //count days
 
     private boolean expired;
-
 
     public Document() {
     }
 
-    public Document( Date dateOfCreation,  String title,  User user,  String documentDescription,
-                      String customer,  Integer contractTerm,  byte[] file,  boolean expired){
+    public Document(Date dateOfCreation, String title, User user, String documentDescription,
+                    String customer, String filename, Integer contractTerm, boolean expired){
+        this.dateOfCreation = dateOfCreation;
+        this.title = title;
+        this.user = user;
+        this.documentDescription = documentDescription;
+        this.customer = customer;
+        this.filename = filename;
+        this.contractTerm = contractTerm;
+        this.expired = expired;
+    }
+
+    public Document(Date dateOfCreation, String title, User user, String documentDescription,
+                    String customer, Integer contractTerm, boolean expired){
         this.dateOfCreation = dateOfCreation;
         this.title = title;
         this.user = user;
         this.documentDescription = documentDescription;
         this.customer = customer;
         this.contractTerm = contractTerm;
-        this.file = file;
+
         this.expired = expired;
     }
 
@@ -103,14 +108,6 @@ public class Document implements Serializable {
         this.contractTerm = contractTerm;
     }
 
-    public byte[] getFile(){
-        return file;
-    }
-
-    public void setFile(byte[] file){
-        this.file = file;
-    }
-
     public boolean isExpired(){
         return expired;
     }
@@ -125,5 +122,13 @@ public class Document implements Serializable {
 
     public void setTitle(String title){
         this.title = title;
+    }
+
+    public String getFilename(){
+        return filename;
+    }
+
+    public void setFilename(String filename){
+        this.filename = filename;
     }
 }

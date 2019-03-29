@@ -1,19 +1,26 @@
 package com.innowise.document.repository;
 
 import com.innowise.document.entity.Document;
+import com.innowise.document.entity.QDocument;
 import com.innowise.document.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DocumentRepo extends JpaRepository<Document, Long> {
+public interface DocumentRepo extends CustomRepo<Document, QDocument, Long>
+        /*extends JpaRepository<Document, Long>, QuerydslPredicateExecutor<Document>,
+        QuerydslBinderCustomizer<QDocument>*/ {
 
-    Optional<List<Document>> findAllByUser(User user);
+
+    Page<Document> findAllByUser(User user, Pageable pageable);
+    List<Document> findAllByUser(User user);
     Optional<Document> findByTitle(String title);
-    Optional<List<Document>> findByExpired(boolean expired);
-    Optional<List<Document>> findByExpiredNot(boolean expired);
+    List<Document> findByExpired(boolean expired);
+    List<Document> findByExpiredNot(boolean expired);
     boolean existsByTitle(String title);
 }
+
