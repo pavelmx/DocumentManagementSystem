@@ -29,6 +29,9 @@ public class FileStorageServiceImpl implements FileStorageService{
     DocumentRepo documentRepo;
 
     @Autowired
+    FileStorage fileStorage;
+
+    @Autowired
     public FileStorageServiceImpl(FileStorage fileStorage) {
         this.fileStorageLocation = Paths.get(fileStorage.getUploadDir())
                 .toAbsolutePath().normalize();
@@ -81,7 +84,10 @@ public class FileStorageServiceImpl implements FileStorageService{
     }
 
     @Override
-    public void deleteFile(Path path){
+    public void deleteFile(Document document){
+        Path path = Paths.get(fileStorage.getUploadDir()+ "\\" + document.getFilename()).toAbsolutePath().normalize();
+        document.setFilename(null);
+        documentRepo.save(document);
         try {
             Files.delete(path);
         } catch (IOException e) {

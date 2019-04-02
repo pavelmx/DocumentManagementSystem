@@ -13,6 +13,8 @@ public interface DocumentService extends RestService<Document>{
 
     Document findDocumentByTitle(String title);
 
+    Document findByFilename(String filename);
+
     List<Document> findDocumentsByExpired(boolean expired);
 
     List<Document> findDocumentsByExpiredNot(boolean expired);

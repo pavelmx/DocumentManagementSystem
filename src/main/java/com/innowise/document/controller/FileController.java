@@ -1,9 +1,12 @@
 package com.innowise.document.controller;
 
+import com.innowise.document.entity.Document;
 import com.innowise.document.file.ResponseFile;
+import com.innowise.document.service.DocumentService;
 import com.innowise.document.service.FileStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,24 +23,18 @@ import java.io.IOException;
 public class FileController {
 
     @Autowired
-    private FileStorageServiceImpl fileStorageService;
+    FileStorageServiceImpl fileStorageService;
+
+    @Autowired
+    DocumentService documentService;
 
     @PostMapping("upload/{id_document}")
-    public ResponseFile uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id_document") Long id_document) {
-        return fileStorageService.addFile(file, id_document);
+    public ResponseEntity<ResponseFile> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id_document") Long id_document) {
+        return new ResponseEntity<>(fileStorageService.addFile(file, id_document), HttpStatus.OK);
     }
 
-    /*@PostMapping("/multiupload")
-    public List<ResponseFile> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        List<ResponseFile> r =  Arrays.asList(files)
-                    .stream()
-                    .map(file -> uploadFile(file))
-                    .collect(Collectors.toList());
-        return r;
-        }*/
-
     @GetMapping("download/{fileName:.+}")
-    public ResponseEntity< Resource > downloadFile(@PathVariable String fileName, HttpServletRequest request) throws IOException{
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) throws IOException{
         Resource resource = fileStorageService.loadFileAsResource(fileName);
         String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         if (contentType == null) {
@@ -49,10 +46,11 @@ public class FileController {
                 .body(resource);
     }
 
-    /*@DeleteMapping("/deleteall")
-    public ResponseEntity<Void> deleteAllFiles(){
-        fileStorageService.deleteAll();
+    @DeleteMapping("delete/{fileName:.+}")
+    public ResponseEntity<Void> deleteFileByName(@PathVariable String fileName){
+        Document doc = documentService.findByFilename(fileName);
+        fileStorageService.deleteFile(doc);
         return new ResponseEntity<>(HttpStatus.OK);
-    }*/
+    }
 }
 

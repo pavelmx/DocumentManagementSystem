@@ -58,6 +58,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public Document findByFilename(String filename){
+        return documentRepo.findByFilename(filename)
+                .orElseThrow(() -> new RuntimeException("Document with filename: '" + filename + "' not found."));
+    }
+
+    @Override
     public List<Document> findDocumentsByExpired(boolean expired){
         return documentRepo.findByExpired(expired);
     }
@@ -128,9 +134,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void deleteById(Long id){
-        Path path = Paths.get(fileStorage.getUploadDir()+ "\\" + getById(id).getFilename()).toAbsolutePath().normalize();
-        System.out.println("path is  " + path);
-        fileStorageService.deleteFile(path);
+        fileStorageService.deleteFile(getById(id));
         documentRepo.deleteById(id);
     }
 

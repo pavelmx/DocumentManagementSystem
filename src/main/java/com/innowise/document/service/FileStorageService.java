@@ -1,5 +1,6 @@
 package com.innowise.document.service;
 
+import com.innowise.document.entity.Document;
 import com.innowise.document.file.ResponseFile;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +13,7 @@ public interface FileStorageService{
 
     Resource loadFileAsResource(String filename);
 
-    void deleteFile(Path path);
+    void deleteFile(Document document);
 
 }
 
