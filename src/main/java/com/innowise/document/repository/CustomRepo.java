@@ -7,7 +7,6 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 
 @NoRepositoryBean

@@ -106,7 +106,7 @@ public class DocumentController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("getallpage")
-    public ResponseEntity<Page<Document>> getAllPage(
+    public ResponseEntity<Page<Document>> findAllPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam int size) {
         Page<Document> docList = documentService.findAllPage(page, size);

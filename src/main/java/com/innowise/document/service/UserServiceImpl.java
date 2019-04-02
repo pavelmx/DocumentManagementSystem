@@ -1,5 +1,6 @@
 package com.innowise.document.service;
 
+import com.innowise.document.entity.Document;
 import com.innowise.document.entity.Role;
 import com.innowise.document.entity.RoleName;
 import com.innowise.document.entity.User;
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
     RoleService roleService;
 
     @Autowired
+    DocumentService documentService;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -62,7 +66,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User with email: '" + email + "' not found."));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Override
     public List<User> getAll() {
         List<User> users = new ArrayList<>();
@@ -72,6 +75,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id) {
+        List<Document> docs = documentService.findAllDocumentsByUserId(id);
+        docs.forEach(doc -> documentService.deleteById(doc.getId()));
         userRepo.deleteById(id);
     }
 

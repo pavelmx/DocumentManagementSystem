@@ -15,8 +15,8 @@ insert into role(name) values('ROLE_USER');
 insert into role(name) values('ROLE_ADMIN');
 
 
-insert into user(activation_code ,name, email,password, username) values(null, 'peter', 'peter@email', '$2a$10$CfiuRDgTnLgJa7zYFyoCuuo60r3P8yPRgr4gCrPCe0Q1DZRP.ls3G', 'peter_big');
-insert into user(activation_code ,name, email,password, username) values(null, 'admin', 'admin@email', '$2a$10$CfiuRDgTnLgJa7zYFyoCuuo60r3P8yPRgr4gCrPCe0Q1DZRP.ls3G', 'admin');
+insert into user(activation_code ,name, email,password, username) values(null, 'user123', 'user123@email', '$2a$10$CfiuRDgTnLgJa7zYFyoCuuo60r3P8yPRgr4gCrPCe0Q1DZRP.ls3G', 'user123');
+insert into user(activation_code ,name, email,password, username) values(null, 'admin123', 'admin123@email', '$2a$10$CfiuRDgTnLgJa7zYFyoCuuo60r3P8yPRgr4gCrPCe0Q1DZRP.ls3G', 'admin123');
 
 
 insert into user_role(id_user, id_role ) values(1, 1);

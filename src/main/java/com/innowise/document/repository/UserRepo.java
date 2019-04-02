@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Repository
-public interface UserRepo extends CustomRepo<User, QUser, Long>/*extends JpaRepository<User, Long>*/ {
+public interface UserRepo extends CustomRepo<User, QUser, Long>{
 
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);

@@ -2,6 +2,7 @@ package com.innowise.document.service;
 
 import com.innowise.document.entity.Document;
 import com.innowise.document.entity.User;
+import com.innowise.document.file.FileStorage;
 import com.innowise.document.repository.DocumentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,17 +12,32 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class DocumentServiceImpl implements DocumentService {
 
     @Autowired
+    FileStorage fileStorage;
+
+    @Autowired
     DocumentRepo documentRepo;
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    FileStorageService fileStorageService;
 
     @Override
     public Document getById(Long id){
@@ -78,6 +94,12 @@ public class DocumentServiceImpl implements DocumentService {
             throw new EntityNotFoundException("User with id: '" + user_id + "' not found.");
         }
         document.setUser(user);
+        if(checkDiffDate( document) < document.getContractTerm()){
+            document.setExpired(false);System.out.println("set false");
+        }
+        else{
+            document.setExpired(true);System.out.println("set true");
+        }
         return documentRepo.save(document);
     }
 
@@ -91,7 +113,12 @@ public class DocumentServiceImpl implements DocumentService {
         }
         User user = userService.getById(user_id);
         document.setUser(user);
-        return documentRepo.save(document);
+        if(checkDiffDate(document) < document.getContractTerm()){
+            document.setExpired(false);System.out.println("set false");
+        } else{
+            document.setExpired(true);System.out.println("set true");
+        }
+       return documentRepo.save(document);
     }
 
     @Override
@@ -101,6 +128,9 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void deleteById(Long id){
+        Path path = Paths.get(fileStorage.getUploadDir()+ "\\" + getById(id).getFilename()).toAbsolutePath().normalize();
+        System.out.println("path is  " + path);
+        fileStorageService.deleteFile(path);
         documentRepo.deleteById(id);
     }
 
@@ -116,14 +146,23 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public Page<Document> findAllPageByUser(String username, int page, int size){
-        Pageable pageable = new PageRequest(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         User user = userService.findUserByUsername(username);
         return documentRepo.findAllByUser(user, pageable);
     }
 
     @Override
     public Page<Document> findAllPage(  int page, int size){
-        Pageable pageable = new PageRequest(page, size);
+        Pageable pageable = PageRequest.of(page, size);
         return documentRepo.findAll(pageable);
+    }
+
+
+    private long checkDiffDate(Document document) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate today = LocalDate.now();
+        LocalDate old = LocalDate.parse(sdf.format(document.getDateOfCreation()));
+        long di = ChronoUnit.DAYS.between(old, today);
+        return di;
     }
 }

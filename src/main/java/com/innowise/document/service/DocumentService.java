@@ -3,6 +3,8 @@ package com.innowise.document.service;
 import com.innowise.document.entity.Document;
 import org.springframework.data.domain.Page;
 
+import java.time.Period;
+import java.util.Date;
 import java.util.List;
 
 public interface DocumentService extends RestService<Document>{
@@ -28,4 +30,6 @@ public interface DocumentService extends RestService<Document>{
     Page<Document> findAllPageByUser(String username, int page, int size);
 
     Page<Document> findAllPage(  int page, int size);
+
+
 }

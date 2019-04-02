@@ -38,7 +38,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("getall")
     public ResponseEntity<List<User>> getAll() {
         List<User> users = new ArrayList<>();

@@ -64,11 +64,15 @@ public class FileStorageServiceImpl implements FileStorageService{
     @Override
     public Resource loadFileAsResource(String fileName) {
         try {
+            Document doc = documentRepo.findByFilename(fileName).get();
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return resource;
             } else {
+                doc.setFilename(null);
+                documentRepo.save(doc);
+                System.out.println("title is " + doc.getTitle());
                 throw new RuntimeException("File " + fileName + " can't be create.");
             }
         } catch (MalformedURLException ex) {
@@ -76,8 +80,12 @@ public class FileStorageServiceImpl implements FileStorageService{
         }
     }
 
-    /*@Override
-    public void deleteAll(){
-        FileSystemUtils.deleteRecursively(fileStorageLocation.toFile());
-    }*/
+    @Override
+    public void deleteFile(Path path){
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

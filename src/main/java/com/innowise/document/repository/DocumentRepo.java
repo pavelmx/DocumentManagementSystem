@@ -11,11 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DocumentRepo extends CustomRepo<Document, QDocument, Long>
-        /*extends JpaRepository<Document, Long>, QuerydslPredicateExecutor<Document>,
-        QuerydslBinderCustomizer<QDocument>*/ {
+public interface DocumentRepo extends CustomRepo<Document, QDocument, Long>{
 
-
+    Optional<Document> findByFilename(String filename);
     Page<Document> findAllByUser(User user, Pageable pageable);
     List<Document> findAllByUser(User user);
     Optional<Document> findByTitle(String title);

@@ -108,7 +108,7 @@ public class Document implements Serializable {
         this.contractTerm = contractTerm;
     }
 
-    public boolean isExpired(){
+    public boolean getExpired(){
         return expired;
     }
 
