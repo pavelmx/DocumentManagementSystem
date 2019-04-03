@@ -1,6 +1,7 @@
 package com.innowise.document.controller;
 
 import com.innowise.document.entity.Document;
+import com.innowise.document.entity.FilterEntity;
 import com.innowise.document.entity.User;
 import com.innowise.document.service.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,35 +21,19 @@ public class FilterController {
     FilterService filterService;
 
 
-
-    @GetMapping("documents-all")
-    public ResponseEntity<Page<Document>> findAllByFilter(@RequestParam(required = false) String fromDate,
-                                                          @RequestParam(required = false) String toDate,
-                                                          @RequestParam(required = false) String title,
-                                                          @RequestParam(required = false) String customer,
-                                                          @RequestParam(required = false) String username,
-                                                          @RequestParam(required = false) String exp,
+    @PostMapping("documents-all")
+    public ResponseEntity<Page<Document>> findAllDocsByFilter(@RequestBody FilterEntity filter,
                                                           @RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam int size,
-                                                          @RequestParam String sortField,
-                                                          @RequestParam String sortOrder) throws ParseException{
-
-        Page<Document> lst =  filterService.findAllDocsByFilter(title, customer, fromDate, toDate, username, exp,
-                page, size,sortField, sortOrder);
+                                                          @RequestParam int size) throws ParseException{
+        Page<Document> lst =  filterService.findAllDocsByFilter(filter, page, size);
         return new ResponseEntity<>(lst, HttpStatus.OK);
     }
 
-    @GetMapping("users-all")
-    public ResponseEntity<Page<User>> findAllByFilter(@RequestParam(required = false) String username,
-                                                          @RequestParam(required = false) String name,
-                                                          @RequestParam(required = false) String email,
-                                                          @RequestParam(required = false) String activationCode,
-                                                          @RequestParam(defaultValue = "0") int page,
-                                                          @RequestParam int size,
-                                                          @RequestParam String sortField,
-                                                          @RequestParam String sortOrder){
-
-        Page<User> lst =  filterService.findAllUsersByFilter(name, activationCode, email, username, page, size, sortField, sortOrder);
+    @PostMapping("users-all")
+    public ResponseEntity<Page<User>> findAllUsersByFilter(@RequestBody FilterEntity filter,
+                                                      @RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam int size){
+        Page<User> lst =  filterService.findAllUsersByFilter(filter, page, size);
         return new ResponseEntity<>(lst, HttpStatus.OK);
     }
 }

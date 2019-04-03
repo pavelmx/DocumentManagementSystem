@@ -1,9 +1,8 @@
 package com.innowise.document.service;
 
-import com.innowise.document.entity.Document;
+import com.innowise.document.entity.*;
 import com.innowise.document.entity.QDocument;
 import com.innowise.document.entity.QUser;
-import com.innowise.document.entity.User;
 import com.innowise.document.repository.DocumentRepo;
 import com.innowise.document.repository.UserRepo;
 import com.querydsl.core.BooleanBuilder;
@@ -32,79 +31,77 @@ public class FilterServiceImpl implements FilterService{
     UserRepo userRepo;
 
     @Override
-    public Page<Document> findAllDocsByFilter(String title, String customer, String fromDate, String toDate,
-                                          String username, String expired, int page, int size, String sortField,
-                                          String sortOrder) throws ParseException{
-        Pageable pageable =  PageRequest.of(page, size, new Sort(Sort.Direction.fromString(sortOrder), sortField));
+    public Page<Document> findAllDocsByFilter(FilterEntity filterEntity, int page, int size) throws ParseException{
+        Pageable pageable =  PageRequest.of(page, size, new Sort
+                (Sort.Direction.fromString(filterEntity.getSortOrder()), filterEntity.getSortField()));
         Page<Document> list =  documentRepo.findAll(
-                createPredicateForDocument(title, customer, fromDate, toDate, username, expired), pageable);
+                createPredicateForDocument(filterEntity), pageable);
 
         return list;
     }
 
     @Override
-    public Page<User> findAllUsersByFilter(String name, String activationCode, String email, String username, int page, int size,
-                                               String sortField, String sortOrder){
-        Pageable pageable =  PageRequest.of(page, size, new Sort(Sort.Direction.fromString(sortOrder), sortField));
-        Page<User> list =  userRepo.findAll(
-                createPredicateForUser(name, email, username, activationCode), pageable);
-        return list;
-    }
-
-    @Override
-    public Predicate createPredicateForDocument(String title, String customer, String fromDate, String toDate,
-                                                String username, String expired) throws ParseException{
+    public Predicate createPredicateForDocument(FilterEntity filterEntity) throws ParseException{
         QDocument qdocument = QDocument.document;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-         //title
-        if (!StringUtils.isEmpty(title)) {
-            booleanBuilder.and(qdocument.title.toLowerCase().contains(title.toLowerCase()));
+        //title
+        if (!StringUtils.isEmpty(filterEntity.getTitle())) {
+            booleanBuilder.and(qdocument.title.toLowerCase().contains(filterEntity.getTitle().toLowerCase()));
         }//customer
-        if (!StringUtils.isEmpty(customer)) {
-            booleanBuilder.and(qdocument.customer.toLowerCase().contains(customer.toLowerCase()));
+        if (!StringUtils.isEmpty(filterEntity.getCustomer())) {
+            booleanBuilder.and(qdocument.customer.toLowerCase().contains(filterEntity.getCustomer().toLowerCase()));
         }//expired
-        if (!StringUtils.isEmpty(expired)) {
-            booleanBuilder.and(qdocument.expired.eq(Boolean.valueOf(expired)));
+        if (!StringUtils.isEmpty(filterEntity.getExpired())) {
+            booleanBuilder.and(qdocument.expired.eq(Boolean.valueOf(filterEntity.getExpired())));
+            System.out.println("exp " + filterEntity.getExpired());
         }//date of creation
-        if (!StringUtils.isEmpty(fromDate) && !StringUtils.isEmpty(toDate)) {
+        if (!StringUtils.isEmpty(filterEntity.getFromDate()) && !StringUtils.isEmpty(filterEntity.getToDate())) {
             booleanBuilder.and(qdocument.dateOfCreation.between(
-                    new SimpleDateFormat("yyyy-MM-dd").parse(fromDate),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(toDate)));
-        }else if (!StringUtils.isEmpty(fromDate)) {
-            //booleanBuilder.and(qdocument.dateOfCreation.after(new SimpleDateFormat("yyyy-MM-dd").parse(fromDate)));
-            booleanBuilder.and(qdocument.dateOfCreation.after(Date.valueOf(LocalDate.parse(fromDate).minusDays(1).toString())));
-        }else if(!StringUtils.isEmpty(toDate)){
-            //booleanBuilder.and(qdocument.dateOfCreation.before(new SimpleDateFormat("yyyy-MM-dd").parse(toDate)));
-            booleanBuilder.and(qdocument.dateOfCreation.before(Date.valueOf(LocalDate.parse(toDate).plusDays(1).toString())));
+                    new SimpleDateFormat("yyyy-MM-dd").parse(filterEntity.getFromDate()),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(filterEntity.getToDate())));
+        }else if (!StringUtils.isEmpty(filterEntity.getFromDate())) {
+            booleanBuilder.and(qdocument.dateOfCreation.after(Date.valueOf(LocalDate.parse(filterEntity.getFromDate()).minusDays(1).toString())));
+        }else if(!StringUtils.isEmpty(filterEntity.getToDate())){
+            booleanBuilder.and(qdocument.dateOfCreation.before(Date.valueOf(LocalDate.parse(filterEntity.getToDate()).plusDays(1).toString())));
         }
         //user
-        if (!StringUtils.isEmpty(username) && username!=null) {
-            booleanBuilder.and(qdocument.user.username.toLowerCase().contains(username));
+        if (!StringUtils.isEmpty(filterEntity.getUsername()) && filterEntity.getUsername()!=null) {
+            booleanBuilder.and(qdocument.user.username.toLowerCase().contains(filterEntity.getUsername()));
         }
         return booleanBuilder.getValue();
     }
 
     @Override
-    public Predicate createPredicateForUser(String name, String email, String username, String activationCode){
+    public Page<User> findAllUsersByFilter(FilterEntity filterEntity, int page, int size){
+        Pageable pageable =  PageRequest.of(page, size, new Sort(Sort.Direction.fromString(filterEntity.getSortOrder()), filterEntity.getSortField()));
+        Page<User> list =  userRepo.findAll(
+                createPredicateForUser(filterEntity), pageable);
+        return list;
+    }
+
+
+
+    @Override
+    public Predicate createPredicateForUser(FilterEntity filterEntity){
         QUser quser = QUser.user;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         //name
-        if (!StringUtils.isEmpty(name)) {
-            booleanBuilder.and(quser.name.toLowerCase().contains(name.toLowerCase()));
+        if (!StringUtils.isEmpty(filterEntity.getName())) {
+            booleanBuilder.and(quser.name.toLowerCase().contains(filterEntity.getName().toLowerCase()));
         }
         //email
-        if (!StringUtils.isEmpty(email)) {
-            booleanBuilder.and(quser.email.toLowerCase().contains(email.toLowerCase()));
+        if (!StringUtils.isEmpty(filterEntity.getEmail())) {
+            booleanBuilder.and(quser.email.toLowerCase().contains(filterEntity.getEmail().toLowerCase()));
         }
         //username
-        if (!StringUtils.isEmpty(username)) {
-            booleanBuilder.and(quser.username.toLowerCase().contains(username.toLowerCase()));
+        if (!StringUtils.isEmpty(filterEntity.getUsername())) {
+            booleanBuilder.and(quser.username.toLowerCase().contains(filterEntity.getUsername().toLowerCase()));
         }
         //activationCode
-        if (activationCode.equals("confirm")) {
+        if (filterEntity.getActivationCode().equals("confirm")) {
             booleanBuilder.and(quser.activationCode.isNull());
         }
-        if (activationCode.equals("notconfirm")) {
+        if (filterEntity.getActivationCode().equals("notconfirm")) {
             booleanBuilder.and(quser.activationCode.isNotNull());
         }
         return booleanBuilder.getValue();

@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
-public class FileStorageServiceImpl implements FileStorageService{
+public class FileStorageServiceImpl implements FileStorageService {
 
     private final Path fileStorageLocation;
 
@@ -35,7 +35,7 @@ public class FileStorageServiceImpl implements FileStorageService{
     private String maxSize;
 
     @Autowired
-    public FileStorageServiceImpl(FileStorage fileStorage) {
+    public FileStorageServiceImpl(FileStorage fileStorage){
         this.fileStorageLocation = Paths.get(fileStorage.getUploadDir())
                 .toAbsolutePath().normalize();
         try {
@@ -46,9 +46,9 @@ public class FileStorageServiceImpl implements FileStorageService{
     }
 
     @Override
-    public ResponseFile addFile(MultipartFile file, Long id_document) {
+    public ResponseFile addFile(MultipartFile file, Long id_document){
         String uuidFile = UUID.randomUUID().toString();
-        String atachDate =  LocalDate.now().getDayOfMonth() + "-"
+        String atachDate = LocalDate.now().getDayOfMonth() + "-"
                 + LocalDate.now().getMonthValue() + "-" + LocalDate.now().getYear();
         String fileName = StringUtils.cleanPath(atachDate + "." + uuidFile + "." + file.getOriginalFilename());
         Document doc = documentRepo.getOne(id_document);
@@ -63,8 +63,7 @@ public class FileStorageServiceImpl implements FileStorageService{
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             ResponseFile responseFile = new ResponseFile(fileName, file.getOriginalFilename(), file.getContentType(), file.getSize());
             return responseFile;
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new RuntimeException("Could not store file '" + fileName + "'. Please try again!", ex);
         }
 
@@ -86,16 +85,15 @@ public class FileStorageServiceImpl implements FileStorageService{
                 throw new NoSuchFileException("File not found " + fileName);
             }
         } catch (MalformedURLException ex) {
-            throw new  RuntimeException("File not found " + fileName, ex);
-        }
-        catch (NoSuchFileException ex) {
-            throw new  RuntimeException("File not found " + fileName, ex);
+            throw new RuntimeException("File not found " + fileName, ex);
+        } catch (NoSuchFileException ex) {
+            throw new RuntimeException("File not found " + fileName, ex);
         }
     }
 
     @Override
     public void deleteFile(Document document){
-        Path path = Paths.get(fileStorage.getUploadDir()+ "\\" + document.getFilename()).toAbsolutePath().normalize();
+        Path path = Paths.get(fileStorage.getUploadDir() + "\\" + document.getFilename()).toAbsolutePath().normalize();
         document.setFilename(null);
         documentRepo.save(document);
         try {

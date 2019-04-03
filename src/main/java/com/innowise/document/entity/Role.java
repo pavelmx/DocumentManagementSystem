@@ -1,11 +1,17 @@
 package com.innowise.document.entity;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "role")
 public class Role implements Serializable {
     @Id
@@ -15,25 +21,5 @@ public class Role implements Serializable {
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
-    public Role() {}
 
-    public Role(RoleName name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public RoleName getName() {
-        return name;
-    }
-
-    public void setName(RoleName name) {
-        this.name = name;
-    }
 }
