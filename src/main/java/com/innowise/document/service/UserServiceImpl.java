@@ -10,18 +10,17 @@ import com.innowise.document.security.JwtResponse;
 import com.innowise.document.security.LoginForm;
 import com.innowise.document.security.RegisterForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityExistsException;
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @Service
@@ -96,10 +95,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user){
+    public User updateUser(User user, String password){
         if (!existsById(user.getId())){
-            throw new EntityExistsException("User with id: '" + user.getId() + "' not found.");
+            throw new EntityNotFoundException("User with username: '" + user.getUsername() + "' not found.");
         }
+        if(encoder.matches(password, user.getPassword())){
+            throw new RuntimeException("New password can't be old password!");
+        }
+        user.setPassword(encoder.encode(password));
+        String message = "Hello, " + user.getUsername() + "!\n " +
+                "Your password was successfully changed. New password - " + password;
+        mailSenderService.send(user.getEmail(), "Change password", message);
         return userRepo.save(user);
     }
 

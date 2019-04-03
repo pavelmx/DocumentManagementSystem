@@ -19,7 +19,7 @@ public interface UserService extends RestService<User> {
 
     boolean existsByEmail(String email);
 
-    User updateUser(User user);
+    User updateUser(User user, String password);
 
     User signUpUser(RegisterForm signup); //add user
 

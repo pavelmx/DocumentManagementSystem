@@ -73,7 +73,7 @@ public class DocumentController {
     }
 
     @PostMapping("add/{user_id}")
-    public ResponseEntity<Document> addDocumentByUserId(@Valid @PathVariable("user_id") Long user_id, @RequestBody Document doc) {
+    public ResponseEntity<Document> addDocumentByUserId(@PathVariable("user_id") Long user_id, @RequestBody Document doc) {
         Document document = documentService.addDocumentByUserId(user_id, doc);
         return new ResponseEntity<>(document, HttpStatus.CREATED);
     }

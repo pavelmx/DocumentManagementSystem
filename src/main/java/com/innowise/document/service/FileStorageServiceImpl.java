@@ -4,7 +4,10 @@ import com.innowise.document.entity.Document;
 import com.innowise.document.file.FileStorage;
 import com.innowise.document.file.ResponseFile;
 import com.innowise.document.repository.DocumentRepo;
+import com.innowise.document.security.ResponseMessage;
+import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -13,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -30,6 +30,9 @@ public class FileStorageServiceImpl implements FileStorageService{
 
     @Autowired
     FileStorage fileStorage;
+
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private String maxSize;
 
     @Autowired
     public FileStorageServiceImpl(FileStorage fileStorage) {
@@ -49,23 +52,27 @@ public class FileStorageServiceImpl implements FileStorageService{
                 + LocalDate.now().getMonthValue() + "-" + LocalDate.now().getYear();
         String fileName = StringUtils.cleanPath(atachDate + "." + uuidFile + "." + file.getOriginalFilename());
         Document doc = documentRepo.getOne(id_document);
-        doc.setFilename(fileName);
-        documentRepo.save(doc);
+
         try {
-            if (fileName.contains("..")) {
+            if (fileName.contains("...")) {
                 throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
             }
+            doc.setFilename(fileName);
+            documentRepo.save(doc);
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             ResponseFile responseFile = new ResponseFile(fileName, file.getOriginalFilename(), file.getContentType(), file.getSize());
             return responseFile;
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             throw new RuntimeException("Could not store file '" + fileName + "'. Please try again!", ex);
         }
+
+
     }
 
     @Override
-    public Resource loadFileAsResource(String fileName) {
+    public Resource loadFileAsResource(String fileName){
         try {
             Document doc = documentRepo.findByFilename(fileName).get();
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
@@ -76,9 +83,12 @@ public class FileStorageServiceImpl implements FileStorageService{
                 doc.setFilename(null);
                 documentRepo.save(doc);
                 System.out.println("title is " + doc.getTitle());
-                throw new RuntimeException("File " + fileName + " can't be create.");
+                throw new NoSuchFileException("File not found " + fileName);
             }
         } catch (MalformedURLException ex) {
+            throw new  RuntimeException("File not found " + fileName, ex);
+        }
+        catch (NoSuchFileException ex) {
             throw new  RuntimeException("File not found " + fileName, ex);
         }
     }
