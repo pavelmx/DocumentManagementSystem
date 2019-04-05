@@ -30,6 +30,9 @@ public class FilterServiceImpl implements FilterService{
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    RoleService roleService;
+
     @Override
     public Page<Document> findAllDocsByFilter(FilterEntity filterEntity, int page, int size) throws ParseException{
         Pageable pageable =  PageRequest.of(page, size, new Sort
@@ -66,7 +69,7 @@ public class FilterServiceImpl implements FilterService{
         }
         //user
         if (!StringUtils.isEmpty(filterEntity.getUsername()) && filterEntity.getUsername()!=null) {
-            booleanBuilder.and(qdocument.user.username.toLowerCase().contains(filterEntity.getUsername()));
+            booleanBuilder.and(qdocument.user.username.contains(filterEntity.getUsername()));
         }
         return booleanBuilder.getValue();
     }
@@ -78,8 +81,6 @@ public class FilterServiceImpl implements FilterService{
                 createPredicateForUser(filterEntity), pageable);
         return list;
     }
-
-
 
     @Override
     public Predicate createPredicateForUser(FilterEntity filterEntity){
@@ -103,7 +104,10 @@ public class FilterServiceImpl implements FilterService{
         }
         if (filterEntity.getActivationCode().equals("notconfirm")) {
             booleanBuilder.and(quser.activationCode.isNotNull());
-        }
+        }//ROLE_USER
+
+            booleanBuilder.and(quser.roles.contains(roleService.findByName(RoleName.ROLE_USER)));
+
         return booleanBuilder.getValue();
     }
 }
