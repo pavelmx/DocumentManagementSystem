@@ -35,3 +35,16 @@ file:
 time:
   in:
     milliseconds: 86400000
+
+security:
+  oauth2:
+    client:
+      clientId: 697750161220-pt2vbi2n7g4689g81f95m9gijsesljm4.apps.googleusercontent.com
+      clientSecret: 9oDJjyhp4cxsvHXZHHysqaxL
+      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      clientAuthenticationScheme: form
+      scope: openid, email, profile
+    resource:
+      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+      preferTokenInfo: true

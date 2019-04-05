@@ -116,8 +116,7 @@ public class UserServiceImpl implements UserService {
         if (existsByEmail(signup.getEmail()))
             throw new EntityExistsException("User with email: '" + signup.getEmail() + "' exists.");
 
-        User newuser = new User(signup.getUsername(), encoder.encode(signup.getPassword()),
-                signup.getEmail(), signup.getName() );
+        User newuser = new User(signup.getUsername(), signup.getName(), encoder.encode(signup.getPassword()), signup.getEmail());
         Set<Role> roles = new HashSet<>();
         roles.add(roleService.findByName(RoleName.ROLE_USER));
         newuser.setRoles(roles);

@@ -1,6 +1,7 @@
 package com.innowise.document.controller;
 
 import com.innowise.document.entity.Document;
+import com.innowise.document.entity.User;
 import com.innowise.document.file.ResponseFile;
 import com.innowise.document.service.DocumentService;
 import com.innowise.document.service.FileStorageServiceImpl;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -29,7 +31,8 @@ public class FileController {
     DocumentService documentService;
 
     @PostMapping("upload/{id_document}")
-    public ResponseEntity<ResponseFile> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable("id_document") Long id_document) {
+    public ResponseEntity<ResponseFile> uploadFile(@RequestParam("file") MultipartFile file,
+                                                   @PathVariable("id_document") Long id_document) {
         return new ResponseEntity<>(fileStorageService.addFile(file, id_document), HttpStatus.OK);
     }
 

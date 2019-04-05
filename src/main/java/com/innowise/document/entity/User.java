@@ -32,20 +32,20 @@ public class User implements Serializable {
     private Long id;
 
     @NotBlank
-    @Size(min = 5, max = 20)
+    @Size(min = 5, max = 20, message = "Username size between 5 and 20")
     private String username;
 
     @NotBlank
-    @Size(min = 5, max = 50)
+    @Size(min = 5, max = 50, message = "Full name size between 5 and 50")
     private String name;
 
     @NotBlank
     @Size(min = 6, max = 500)
     private String password;
 
-    @Email
+    @Email(message = "Email is incorrect")
     @NotBlank
-    @Size(min = 6, max = 50)
+    @Size(min = 6, max = 50, message = "Email size between 5 and 50")
     private String email;
 
     private String activationCode;
@@ -55,7 +55,7 @@ public class User implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "id_role"))
     private Set<Role> roles = new HashSet<>();
 
-    public User( String username,  String name,  String password,  String email){
+    public User(String username,  String name, String password, String email){
         this.username = username;
         this.name = name;
         this.password = password;

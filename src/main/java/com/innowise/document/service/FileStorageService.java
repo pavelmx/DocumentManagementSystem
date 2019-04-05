@@ -1,6 +1,7 @@
 package com.innowise.document.service;
 
 import com.innowise.document.entity.Document;
+import com.innowise.document.entity.User;
 import com.innowise.document.file.ResponseFile;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

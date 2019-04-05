@@ -95,10 +95,10 @@ public class DocumentServiceImpl implements DocumentService {
         }
         document.setUser(user);
         if(checkDiffDate( document) < document.getContractTerm()){
-            document.setExpired(false);System.out.println("set false");
+            document.setExpired(false);
         }
         else{
-            document.setExpired(true);System.out.println("set true");
+            document.setExpired(true);
         }
         return documentRepo.save(document);
     }
@@ -114,9 +114,9 @@ public class DocumentServiceImpl implements DocumentService {
         User user = userService.getById(user_id);
         document.setUser(user);
         if(checkDiffDate(document) < document.getContractTerm()){
-            document.setExpired(false);System.out.println("set false");
+            document.setExpired(false);
         } else{
-            document.setExpired(true);System.out.println("set true");
+            document.setExpired(true);
         }
        return documentRepo.save(document);
     }
