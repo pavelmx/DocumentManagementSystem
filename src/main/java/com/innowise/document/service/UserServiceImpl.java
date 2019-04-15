@@ -95,17 +95,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user, String password){
+    public User updateUser(User user){
         if (!existsById(user.getId())) {
-            throw new EntityNotFoundException("User with username: '" + user.getUsername() + "' not found.");
+            throw new EntityNotFoundException("User with id: '" + user.getId() + "' not found.");
         }
-        if (encoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("New password can't be old password!");
+
+        User dbuser = getById(user.getId());
+        String passwordString = user.getPassword();
+        if (!user.getPassword().isEmpty()) {
+            if (encoder.matches(user.getPassword(), dbuser.getPassword())) {
+                throw new RuntimeException("New password can't be old password!");
+            }
+            user.setPassword(encoder.encode(user.getPassword()));
+            String message = "Hello, " + user.getUsername() + "!\n " +
+                    "Your password was successfully changed. New password - " + passwordString;
+            mailSenderService.send(user.getEmail(), "Change password", message);
+        } else {
+            user.setPassword(dbuser.getPassword());
         }
-        user.setPassword(encoder.encode(password));
-        String message = "Hello, " + user.getUsername() + "!\n " +
-                "Your password was successfully changed. New password - " + password;
-        mailSenderService.send(user.getEmail(), "Change password", message);
         return userRepo.save(user);
     }
 

@@ -1,7 +1,6 @@
 package com.innowise.document.service;
 
 import com.innowise.document.entity.Document;
-import com.innowise.document.entity.User;
 import com.innowise.document.file.FileStorage;
 import com.innowise.document.file.ResponseFile;
 import com.innowise.document.repository.DocumentRepo;
@@ -18,7 +17,6 @@ import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {

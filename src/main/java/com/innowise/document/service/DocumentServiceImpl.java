@@ -118,6 +118,7 @@ public class DocumentServiceImpl implements DocumentService {
         } else{
             document.setExpired(true);
         }
+
        return documentRepo.save(document);
     }
 

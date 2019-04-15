@@ -22,6 +22,10 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath activationCode = createString("activationCode");
 
+    public final StringPath adress = createString("adress");
+
+    public final DatePath<java.util.Date> dateOfBirth = createDate("dateOfBirth", java.util.Date.class);
+
     public final StringPath email = createString("email");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

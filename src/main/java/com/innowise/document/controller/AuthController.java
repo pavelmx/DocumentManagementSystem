@@ -5,7 +5,6 @@ import com.innowise.document.security.JwtResponse;
 import com.innowise.document.security.LoginForm;
 import com.innowise.document.security.RegisterForm;
 import com.innowise.document.security.ResponseMessage;
-import com.innowise.document.service.FileStorageService;
 import com.innowise.document.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/auth")

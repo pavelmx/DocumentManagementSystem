@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,10 +46,15 @@ public class User implements Serializable {
 
     @Email(message = "Email is incorrect")
     @NotBlank
-    @Size(min = 6, max = 50, message = "Email size between 5 and 50")
+    @Size(min = 5, max = 50, message = "Email size between 5 and 50")
     private String email;
 
     private String activationCode;
+
+    private String adress;
+
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
 
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"),

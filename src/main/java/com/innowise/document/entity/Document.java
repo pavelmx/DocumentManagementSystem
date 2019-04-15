@@ -5,9 +5,15 @@ package com.innowise.document.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -24,14 +30,17 @@ public class Document implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dateOfCreation;
 
+    @NotBlank
     private String title;
 
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User user;
 
+    @NotBlank
     private String documentDescription;
 
+    @NotBlank
     private String customer;
 
     private String filename;
@@ -39,5 +48,4 @@ public class Document implements Serializable {
     private Integer contractTerm;  //count days
 
     private boolean expired;
-
 }

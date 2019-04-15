@@ -4,9 +4,6 @@ import com.innowise.document.entity.User;
 import com.innowise.document.security.JwtResponse;
 import com.innowise.document.security.LoginForm;
 import com.innowise.document.security.RegisterForm;
-import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.util.List;
 
 
 public interface UserService extends RestService<User> {
@@ -19,7 +16,7 @@ public interface UserService extends RestService<User> {
 
     boolean existsByEmail(String email);
 
-    User updateUser(User user, String password);
+    User updateUser(User user);
 
     User signUpUser(RegisterForm signup); //add user
 

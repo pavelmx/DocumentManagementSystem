@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +64,7 @@ public class DocumentController {
         return new ResponseEntity<>(docList, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("getall")
     public ResponseEntity<List<Document>> getAll() {
         List<Document> docList = new ArrayList<>();

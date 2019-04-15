@@ -5,6 +5,7 @@ import com.innowise.document.entity.FilterEntity;
 import com.innowise.document.entity.User;
 import com.querydsl.core.types.Predicate;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.vote.AbstractAccessDecisionManager;
 
 import java.text.ParseException;
 
@@ -17,4 +18,5 @@ public interface FilterService {
     Page<User> findAllUsersByFilter(FilterEntity filterEntity, int page, int size);
 
     Predicate createPredicateForUser(FilterEntity filterEntity);
+
 }

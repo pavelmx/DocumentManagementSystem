@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.TimeZone;
 
 @Component
 @EnableScheduling
@@ -19,7 +20,7 @@ public class ScheduledTasks {
     @Autowired
     DocumentRepo documentRepo;
 
-    @Scheduled(fixedRateString = "${time.in.milliseconds}")
+    @Scheduled(cron = "0 0 1 * * *")
     public void checkExpired() {
         LocalDate today = LocalDate.now();
         List<Document> docList = documentRepo.findAll();
