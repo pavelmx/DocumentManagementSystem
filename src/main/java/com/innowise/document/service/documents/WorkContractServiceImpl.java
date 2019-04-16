@@ -33,7 +33,7 @@ public class WorkContractServiceImpl implements DocumentService<WorkContract>{
         if (!rentalContractList.isEmpty()) {
             for (WorkContract rc : rentalContractList) {
                 if (rc.getTitle().equals(workContract.getTitle()))
-                    throw new EntityExistsException("RentalContract with title: '" + workContract.getTitle() + "' exists.");
+                    throw new EntityExistsException("WorkContract with title: '" + workContract.getTitle() + "' exists.");
             }
         }
         workContract.setActive(true);
@@ -44,7 +44,7 @@ public class WorkContractServiceImpl implements DocumentService<WorkContract>{
     @Override
     public WorkContract updateByUsername(String username, WorkContract workContract){
         if (!existsById(workContract.getId())) {
-            throw new EntityExistsException("RentalContract with id: '" + workContract.getId() + "' not found.");
+            throw new EntityExistsException("WorkContract with id: '" + workContract.getId() + "' not found.");
         }
         if (!userRepo.existsByUsername(username)) {
             throw new EntityNotFoundException("User  '" + username + "' not found.");
@@ -67,7 +67,7 @@ public class WorkContractServiceImpl implements DocumentService<WorkContract>{
     @Override
     public WorkContract getById(Long id){
         return workContractRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("RentalContract with id: '" + id + "' not found."));
+                .orElseThrow(() -> new RuntimeException("WorkContract with id: '" + id + "' not found."));
     }
 
     @Override
