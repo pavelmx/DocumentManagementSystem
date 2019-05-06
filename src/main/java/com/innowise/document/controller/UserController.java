@@ -1,14 +1,18 @@
 package com.innowise.document.controller;
 
+
+import com.innowise.document.entity.FilterObject;
 import com.innowise.document.entity.User;
 import com.innowise.document.service.UserService;
+import com.innowise.document.service.filters.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    FilterService<User> filterService;
 
     @GetMapping("get/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id){
@@ -65,5 +72,13 @@ public class UserController {
     public ResponseEntity<Void> deleteAll(){
         userService.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("users-all")
+    public ResponseEntity<Page<User>> findAllUsersByFilter(@RequestBody FilterObject filter,
+                                                           @RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam int size) throws ParseException{
+        Page<User> lst =  filterService.findAllByFilter(filter, page, size);
+        return new ResponseEntity<>(lst, HttpStatus.OK);
     }
 }

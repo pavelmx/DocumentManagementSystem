@@ -1,9 +1,7 @@
 package com.innowise.document.entity.documents;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.innowise.document.entity.CatalogOfOperationMode;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,11 +13,14 @@ import java.util.Date;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "work_contract")
-public class WorkContract extends DocumentPattern{
+public class WorkContract extends DocumentPattern {
 
     @Temporal(TemporalType.DATE)
     private Date startWork;
 
+    private Integer term;
+
+    @NotBlank
     private String position;
 
     @ManyToOne
@@ -31,4 +32,6 @@ public class WorkContract extends DocumentPattern{
     private Integer holiday;
 
     private Integer salary;
+
+
 }

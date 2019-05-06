@@ -1,21 +1,16 @@
 package com.innowise.document.service;
 
-import com.innowise.document.entity.Document;
-import com.innowise.document.entity.User;
-import com.innowise.document.file.ResponseFile;
+import com.innowise.document.entity.file.ResponseFile;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-
 public interface FileStorageService{
 
-    ResponseFile addFile(MultipartFile file, Long id_document);
+    ResponseFile addFile(MultipartFile file, Long id_document, String name);
 
-    Resource loadFileAsResource(String filename);
+    Resource loadFileAsResource(String filename, String name);
 
-    void deleteFile(Document document);
+    void deleteFile(String fileName, String name);
 
 }
 

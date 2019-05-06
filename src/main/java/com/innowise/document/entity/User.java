@@ -53,8 +53,7 @@ public class User implements Serializable {
 
     private String adress;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+
 
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user"),

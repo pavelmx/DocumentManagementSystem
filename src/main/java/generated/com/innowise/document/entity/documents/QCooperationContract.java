@@ -38,12 +38,21 @@ public class QCooperationContract extends EntityPathBase<CooperationContract> {
     public final DatePath<java.util.Date> dateOfCreation;
 
     //inherited
+    public final StringPath filename;
+
+    //inherited
     public final NumberPath<Long> id;
+
+    //inherited
+    public final BooleanPath isActive;
+
+    //inherited
+    public final StringPath kind;
 
     public final StringPath kindOfActivity = createString("kindOfActivity");
 
     //inherited
-    public final DateTimePath<java.util.Date> lastChange;
+    public final DateTimePath<java.time.LocalDateTime> lastChange;
 
     //inherited
     public final StringPath otherInfo;
@@ -51,6 +60,9 @@ public class QCooperationContract extends EntityPathBase<CooperationContract> {
     public final NumberPath<Integer> term = createNumber("term", Integer.class);
 
     public final StringPath terminationConditions = createString("terminationConditions");
+
+    //inherited
+    public final StringPath title;
 
     // inherited
     public final com.innowise.document.entity.QUser user;
@@ -77,9 +89,13 @@ public class QCooperationContract extends EntityPathBase<CooperationContract> {
         this.clientAdress = _super.clientAdress;
         this.clientFullName = _super.clientFullName;
         this.dateOfCreation = _super.dateOfCreation;
+        this.filename = _super.filename;
         this.id = _super.id;
+        this.isActive = _super.isActive;
+        this.kind = _super.kind;
         this.lastChange = _super.lastChange;
         this.otherInfo = _super.otherInfo;
+        this.title = _super.title;
         this.user = _super.user;
     }
 

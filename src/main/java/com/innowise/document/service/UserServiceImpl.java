@@ -1,10 +1,11 @@
 package com.innowise.document.service;
 
-import com.innowise.document.entity.Document;
 import com.innowise.document.entity.Role;
 import com.innowise.document.entity.RoleName;
 import com.innowise.document.entity.User;
+import com.innowise.document.entity.documents.*;
 import com.innowise.document.repository.UserRepo;
+import com.innowise.document.repository.documents.*;
 import com.innowise.document.security.JwtProvider;
 import com.innowise.document.security.JwtResponse;
 import com.innowise.document.security.LoginForm;
@@ -33,7 +34,19 @@ public class UserServiceImpl implements UserService {
     RoleService roleService;
 
     @Autowired
-    DocumentService documentService;
+    WorkContractRepo workContractRepo;
+
+    @Autowired
+    CreditContractRepo creditContractRepo;
+
+    @Autowired
+    CooperationContractRepo cooperationContractRepo;
+
+    @Autowired
+    RentalContractRepo rentalContractRepo;
+
+    @Autowired
+    ContractOfSaleRepo contractOfSaleRepo;
 
     @Autowired
     PasswordEncoder encoder;
@@ -74,8 +87,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id){
-        List<Document> docs = documentService.findAllDocumentsByUserId(id);
-        docs.forEach(doc -> documentService.deleteById(doc.getId()));
+        String username = userRepo.findById(id).get().getUsername();
+
+        List<WorkContract> workContracts = workContractRepo.findAllByUser_Username(username);
+        workContracts.forEach(doc -> workContractRepo.deleteById(doc.getId()));
+
+        List<CreditContract> creditContracts = creditContractRepo.findAllByUser_Username(username);
+        creditContracts.forEach(doc -> creditContractRepo.deleteById(doc.getId()));
+
+        List<CooperationContract> cooperationContracts = cooperationContractRepo.findAllByUser_Username(username);
+        cooperationContracts.forEach(doc -> cooperationContractRepo.deleteById(doc.getId()));
+
+        List<RentalContract>  rentalContracts = rentalContractRepo.findAllByUser_Username(username);
+        rentalContracts.forEach(doc -> rentalContractRepo.deleteById(doc.getId()));
+
+        List<ContractOfSale> contractsOfSale = contractOfSaleRepo.findAllByUser_Username(username);
+        contractsOfSale.forEach(doc -> contractOfSaleRepo.deleteById(doc.getId()));
+
         userRepo.deleteById(id);
     }
 
@@ -113,6 +141,7 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setPassword(dbuser.getPassword());
         }
+        user.setRoles(dbuser.getRoles());
         return userRepo.save(user);
     }
 

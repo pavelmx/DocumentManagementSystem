@@ -38,15 +38,27 @@ public class QCreditContract extends EntityPathBase<CreditContract> {
     public final DatePath<java.util.Date> dateOfCreation;
 
     //inherited
+    public final StringPath filename;
+
+    //inherited
     public final NumberPath<Long> id;
 
     //inherited
-    public final DateTimePath<java.util.Date> lastChange;
+    public final BooleanPath isActive;
+
+    //inherited
+    public final StringPath kind;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastChange;
 
     //inherited
     public final StringPath otherInfo;
 
     public final NumberPath<Integer> term = createNumber("term", Integer.class);
+
+    //inherited
+    public final StringPath title;
 
     // inherited
     public final com.innowise.document.entity.QUser user;
@@ -73,9 +85,13 @@ public class QCreditContract extends EntityPathBase<CreditContract> {
         this.clientAdress = _super.clientAdress;
         this.clientFullName = _super.clientFullName;
         this.dateOfCreation = _super.dateOfCreation;
+        this.filename = _super.filename;
         this.id = _super.id;
+        this.isActive = _super.isActive;
+        this.kind = _super.kind;
         this.lastChange = _super.lastChange;
         this.otherInfo = _super.otherInfo;
+        this.title = _super.title;
         this.user = _super.user;
     }
 

@@ -1,17 +1,19 @@
 package com.innowise.document.service.documents;
 
 import com.innowise.document.entity.documents.CooperationContract;
-import com.innowise.document.entity.documents.CreditContract;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.repository.documents.CooperationContractRepo;
-import com.innowise.document.repository.documents.CreditContractRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,6 +24,18 @@ public class CooperationContractServiceImpl implements DocumentService<Cooperati
 
     @Autowired
     UserRepo userRepo;
+
+    @Override
+    public Page<CooperationContract> getAllByUsername(String username, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return cooperationContractRepo.findAllByUser_Username(username, pageable);
+    }
+
+    @Override
+    public Page<CooperationContract> getAllPage(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return cooperationContractRepo.findAll(pageable);
+    }
 
     @Override
     public List<CooperationContract> getAllByUsername(String username){
@@ -40,6 +54,8 @@ public class CooperationContractServiceImpl implements DocumentService<Cooperati
                     throw new EntityExistsException("CooperationContract with title: '" + cooperationContract.getTitle() + "' exists.");
             }
         }
+        cooperationContract.setKind("Cooperation contract");
+        cooperationContract.setDateOfCreation(Date.valueOf(LocalDate.now()));
         setActiveStatus(cooperationContract);
         cooperationContract.setUser(userRepo.findByUsername(username).get());
         return cooperationContractRepo.save(cooperationContract);
@@ -53,6 +69,7 @@ public class CooperationContractServiceImpl implements DocumentService<Cooperati
         if (!userRepo.existsByUsername(username)) {
             throw new EntityNotFoundException("User  '" + username + "' not found.");
         }
+        cooperationContract.setLastChange(LocalDateTime.now());
         setActiveStatus(cooperationContract);
         cooperationContract.setUser(userRepo.findByUsername(username).get());
         return cooperationContractRepo.save(cooperationContract);

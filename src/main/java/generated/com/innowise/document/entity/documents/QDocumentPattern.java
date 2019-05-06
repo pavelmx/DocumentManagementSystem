@@ -28,11 +28,15 @@ public class QDocumentPattern extends EntityPathBase<DocumentPattern> {
 
     public final DatePath<java.util.Date> dateOfCreation = createDate("dateOfCreation", java.util.Date.class);
 
+    public final StringPath filename = createString("filename");
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final BooleanPath isActive = createBoolean("isActive");
 
-    public final DateTimePath<java.util.Date> lastChange = createDateTime("lastChange", java.util.Date.class);
+    public final StringPath kind = createString("kind");
+
+    public final DateTimePath<java.time.LocalDateTime> lastChange = createDateTime("lastChange", java.time.LocalDateTime.class);
 
     public final StringPath otherInfo = createString("otherInfo");
 

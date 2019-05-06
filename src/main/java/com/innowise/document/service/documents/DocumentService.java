@@ -1,8 +1,8 @@
 package com.innowise.document.service.documents;
 
 import com.innowise.document.entity.documents.DocumentPattern;
-import com.innowise.document.entity.documents.RentalContract;
 import com.innowise.document.service.RestService;
+import org.springframework.data.domain.Page;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -11,6 +11,10 @@ import java.util.Date;
 import java.util.List;
 
 public interface DocumentService<T extends DocumentPattern> extends RestService<T> {
+
+    Page<T> getAllByUsername(String username, int page, int size);
+
+    Page<T> getAllPage(int page, int size);
 
     List<T> getAllByUsername(String username);
 

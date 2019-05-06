@@ -1,58 +1,8 @@
-2019-04-08 17:35:55 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLException: Значение слишком длинное для поля "DOCUMENT_DESCRIPTION VARCHAR(255)": "'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sit placeat odit rem blanditiis! Vel atque quae repellendus, adipi... (360)"
-Value too long for column "DOCUMENT_DESCRIPTION VARCHAR(255)": "'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sit placeat odit rem blanditiis! Vel atque quae repellendus, adipi... (360)"; SQL statement:
-update document set contract_term=?, customer=?, date_of_creation=?, document_description=?, expired=?, filename=?, title=?, id_user=? where id=? [22001-197]
-2019-04-08 17:36:27 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLException: Значение слишком длинное для поля "DOCUMENT_DESCRIPTION VARCHAR(255)": "'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sit placeat odit rem blanditiis! Vel atque quae repellendus, adipi... (360)"
-Value too long for column "DOCUMENT_DESCRIPTION VARCHAR(255)": "'Lorem ipsum dolor sit amet consectetur adipisicing elit. Est sit placeat odit rem blanditiis! Vel atque quae repellendus, adipi... (360)"; SQL statement:
-update document set contract_term=?, customer=?, date_of_creation=?, document_description=?, expired=?, filename=?, title=?, id_user=? where id=? [22001-197]
-2019-04-09 16:10:44 jdbc[86]: null
-org.h2.message.DbException: Незакрытое приложением соединение уничтожено сборщиком мусора
-The connection was not closed by the application and is garbage collected [90018-197]
-	at org.h2.message.DbException.get(DbException.java:179)
-	at org.h2.message.DbException.get(DbException.java:155)
-	at org.h2.message.DbException.get(DbException.java:144)
-	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:197)
-	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:137)
-	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:103)
-	at org.h2.Driver.connect(Driver.java:69)
-	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:136)
-	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:369)
-	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:198)
-	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:467)
-	at com.zaxxer.hikari.pool.HikariPool.access$100(HikariPool.java:71)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:706)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:692)
-	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: org.h2.jdbc.JdbcSQLException: Незакрытое приложением соединение уничтожено сборщиком мусора
-The connection was not closed by the application and is garbage collected [90018-197]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
-	... 18 more
-2019-04-09 16:10:44 jdbc[86]: null
-org.h2.message.DbException: Незакрытое приложением соединение уничтожено сборщиком мусора
-The connection was not closed by the application and is garbage collected [90018-197]
-	at org.h2.message.DbException.get(DbException.java:179)
-	at org.h2.message.DbException.get(DbException.java:155)
-	at org.h2.message.DbException.get(DbException.java:144)
-	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:197)
-	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:137)
-	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:103)
-	at org.h2.Driver.connect(Driver.java:69)
-	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:136)
-	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:369)
-	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:198)
-	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:467)
-	at com.zaxxer.hikari.pool.HikariPool.access$100(HikariPool.java:71)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:706)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:692)
-	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-	at java.lang.Thread.run(Thread.java:748)
-Caused by: org.h2.jdbc.JdbcSQLException: Незакрытое приложением соединение уничтожено сборщиком мусора
-The connection was not closed by the application and is garbage collected [90018-197]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:357)
-	... 18 more
+2019-05-06 23:06:21 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLException: Ошибка преобразования данных при конвертации "'' (CATALOG_OF_OPERATION_MODE: ID BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE)"
+Data conversion error converting "'' (CATALOG_OF_OPERATION_MODE: ID BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE)"; SQL statement:
+INSERT INTO "PUBLIC"."CATALOG_OF_OPERATION_MODE"("ID","OPERATION_MODE")VALUES(?,?) -- (?1, ?2) [22018-197]
+2019-05-06 23:06:21 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLException: Ошибка преобразования данных при конвертации "'' (CATALOG_OF_OPERATION_MODE: ID BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE)"
+Data conversion error converting "'' (CATALOG_OF_OPERATION_MODE: ID BIGINT DEFAULT (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE) NOT NULL NULL_TO_DEFAULT SEQUENCE PUBLIC.SYSTEM_SEQUENCE_D8BE2E8D_967A_445E_A7CE_F37E46CF38DE)"; SQL statement:
+INSERT INTO "PUBLIC"."CATALOG_OF_OPERATION_MODE"("ID","OPERATION_MODE")VALUES(?,?) -- (?1, ?2) [22018-197]

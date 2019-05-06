@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -25,6 +26,10 @@ public class DocumentPattern implements Serializable {
 
     protected String title;
 
+    protected String kind;
+
+    protected String filename;
+
     protected String clientFullName;
 
     protected String clientAdress;
@@ -33,10 +38,11 @@ public class DocumentPattern implements Serializable {
 
     protected boolean isActive;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    protected Date lastChange;
+    protected LocalDateTime lastChange;
 
     @ManyToOne
     @JoinColumn(name = "id_user")
     protected User user;
+
+
 }

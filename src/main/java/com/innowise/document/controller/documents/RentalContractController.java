@@ -1,13 +1,17 @@
 package com.innowise.document.controller.documents;
 
+import com.innowise.document.entity.FilterObject;
 import com.innowise.document.entity.documents.RentalContract;
 import com.innowise.document.service.documents.DocumentService;
+import com.innowise.document.service.filters.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +22,9 @@ public class RentalContractController {
 
     @Autowired
     DocumentService<RentalContract> rentalContractService;
+
+    @Autowired
+    FilterService<RentalContract> filterService;
 
 
     @GetMapping("get/{id}")
@@ -70,5 +77,12 @@ public class RentalContractController {
     public ResponseEntity<Void> deleteAll() {
         rentalContractService.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("page/get")
+    public ResponseEntity<Page<RentalContract>> getAllByUsername(
+            @RequestBody FilterObject obj, @RequestParam int page, @RequestParam int size) throws ParseException{
+        Page<RentalContract> cooperationContractList = filterService.findAllByFilter(obj, page, size);
+        return new ResponseEntity<>(cooperationContractList, HttpStatus.OK);
     }
 }

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -16,9 +15,8 @@ import javax.validation.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "cooperation_contract")
-public class CooperationContract extends DocumentPattern{ //совместная деятельность
+public class CooperationContract extends DocumentPattern { //совместная деятельность
 
-    @NotBlank
     private Integer term;
 
     @NotBlank

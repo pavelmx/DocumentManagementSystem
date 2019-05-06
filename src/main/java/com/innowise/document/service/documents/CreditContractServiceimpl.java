@@ -1,17 +1,19 @@
 package com.innowise.document.service.documents;
 
 import com.innowise.document.entity.documents.CreditContract;
-import com.innowise.document.entity.documents.RentalContract;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.repository.documents.CreditContractRepo;
-import com.innowise.document.repository.documents.RentalContractRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,6 +24,18 @@ public class CreditContractServiceimpl implements DocumentService<CreditContract
 
     @Autowired
     UserRepo userRepo;
+
+    @Override
+    public Page<CreditContract> getAllByUsername(String username, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return creditContractRepo.findAllByUser_Username(username, pageable);
+    }
+
+    @Override
+    public Page<CreditContract> getAllPage(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return creditContractRepo.findAll(pageable);
+    }
 
     @Override
     public List<CreditContract> getAllByUsername(String username){
@@ -40,6 +54,8 @@ public class CreditContractServiceimpl implements DocumentService<CreditContract
                     throw new EntityExistsException("CreditContract with title: '" + creditContract.getTitle() + "' exists.");
             }
         }
+        creditContract.setKind("Credit contract");
+        creditContract.setDateOfCreation(Date.valueOf(LocalDate.now()));
         setActiveStatus(creditContract);
         creditContract.setUser(userRepo.findByUsername(username).get());
         return creditContractRepo.save(creditContract);
@@ -53,6 +69,7 @@ public class CreditContractServiceimpl implements DocumentService<CreditContract
         if (!userRepo.existsByUsername(username)) {
             throw new EntityNotFoundException("User  '" + username + "' not found.");
         }
+        creditContract.setLastChange(LocalDateTime.now());
         setActiveStatus(creditContract);
         creditContract.setUser(userRepo.findByUsername(username).get());
         return creditContractRepo.save(creditContract);

@@ -1,17 +1,19 @@
 package com.innowise.document.service.documents;
 
 import com.innowise.document.entity.documents.ContractOfSale;
-import com.innowise.document.entity.documents.CooperationContract;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.repository.documents.ContractOfSaleRepo;
-import com.innowise.document.repository.documents.CooperationContractRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,6 +24,18 @@ public class ContractOfSaleServiceImpl implements DocumentService<ContractOfSale
 
     @Autowired
     UserRepo userRepo;
+
+    @Override
+    public Page<ContractOfSale> getAllByUsername(String username, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return contractOfSaleRepo.findAllByUser_Username(username, pageable);
+    }
+
+    @Override
+    public Page<ContractOfSale> getAllPage(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return contractOfSaleRepo.findAll(pageable);
+    }
 
     @Override
     public List<ContractOfSale> getAllByUsername(String username){
@@ -40,6 +54,8 @@ public class ContractOfSaleServiceImpl implements DocumentService<ContractOfSale
                     throw new EntityExistsException("ContractOfSale with title: '" + contractOfSale.getTitle() + "' exists.");
             }
         }
+        contractOfSale.setKind("Contract of sale");
+        contractOfSale.setDateOfCreation(Date.valueOf(LocalDate.now()));
         setActiveStatus(contractOfSale);
         contractOfSale.setUser(userRepo.findByUsername(username).get());
         return contractOfSaleRepo.save(contractOfSale);
@@ -53,6 +69,7 @@ public class ContractOfSaleServiceImpl implements DocumentService<ContractOfSale
         if (!userRepo.existsByUsername(username)) {
             throw new EntityNotFoundException("User  '" + username + "' not found.");
         }
+        contractOfSale.setLastChange(LocalDateTime.now());
         setActiveStatus(contractOfSale);
         contractOfSale.setUser(userRepo.findByUsername(username).get());
         return contractOfSaleRepo.save(contractOfSale);

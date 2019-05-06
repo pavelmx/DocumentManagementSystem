@@ -33,15 +33,24 @@ public class QWorkContract extends EntityPathBase<WorkContract> {
     //inherited
     public final DatePath<java.util.Date> dateOfCreation;
 
+    //inherited
+    public final StringPath filename;
+
     public final NumberPath<Integer> holiday = createNumber("holiday", Integer.class);
 
     //inherited
     public final NumberPath<Long> id;
 
     //inherited
-    public final DateTimePath<java.util.Date> lastChange;
+    public final BooleanPath isActive;
 
-    public final QCatalogOfOperationMode operationMode;
+    //inherited
+    public final StringPath kind;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastChange;
+
+    public final com.innowise.document.entity.QCatalogOfOperationMode operationMode;
 
     //inherited
     public final StringPath otherInfo;
@@ -51,6 +60,11 @@ public class QWorkContract extends EntityPathBase<WorkContract> {
     public final NumberPath<Integer> salary = createNumber("salary", Integer.class);
 
     public final DatePath<java.util.Date> startWork = createDate("startWork", java.util.Date.class);
+
+    public final NumberPath<Integer> term = createNumber("term", Integer.class);
+
+    //inherited
+    public final StringPath title;
 
     // inherited
     public final com.innowise.document.entity.QUser user;
@@ -79,10 +93,14 @@ public class QWorkContract extends EntityPathBase<WorkContract> {
         this.clientAdress = _super.clientAdress;
         this.clientFullName = _super.clientFullName;
         this.dateOfCreation = _super.dateOfCreation;
+        this.filename = _super.filename;
         this.id = _super.id;
+        this.isActive = _super.isActive;
+        this.kind = _super.kind;
         this.lastChange = _super.lastChange;
-        this.operationMode = inits.isInitialized("operationMode") ? new QCatalogOfOperationMode(forProperty("operationMode")) : null;
+        this.operationMode = inits.isInitialized("operationMode") ? new com.innowise.document.entity.QCatalogOfOperationMode(forProperty("operationMode")) : null;
         this.otherInfo = _super.otherInfo;
+        this.title = _super.title;
         this.user = _super.user;
     }
 

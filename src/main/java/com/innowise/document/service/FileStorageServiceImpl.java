@@ -1,9 +1,9 @@
 package com.innowise.document.service;
 
-import com.innowise.document.entity.Document;
-import com.innowise.document.file.FileStorage;
-import com.innowise.document.file.ResponseFile;
-import com.innowise.document.repository.DocumentRepo;
+import com.innowise.document.entity.documents.*;
+import com.innowise.document.entity.file.FileStorage;
+import com.innowise.document.entity.file.ResponseFile;
+import com.innowise.document.repository.documents.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,7 +24,19 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final Path fileStorageLocation;
 
     @Autowired
-    DocumentRepo documentRepo;
+    WorkContractRepo workContractRepo;
+
+    @Autowired
+    CreditContractRepo creditContractRepo;
+
+    @Autowired
+    RentalContractRepo rentalContractRepo;
+
+    @Autowired
+    CooperationContractRepo cooperationContractRepo;
+
+    @Autowired
+    ContractOfSaleRepo contractOfSaleRepo;
 
     @Autowired
     FileStorage fileStorage;
@@ -43,17 +55,50 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private void createUserDirectory(){
         Path userFileStorageLocation = getUserFileStorageLocation().toAbsolutePath().normalize();
+        Path workStorageLocation = getUserFileStorageLocation().resolve("work").toAbsolutePath().normalize();
+        Path saleStorageLocation = getUserFileStorageLocation().resolve("sale").toAbsolutePath().normalize();
+        Path creditStorageLocation = getUserFileStorageLocation().resolve("credit").toAbsolutePath().normalize();
+        Path cooperationStorageLocation = getUserFileStorageLocation().resolve("cooperation").toAbsolutePath().normalize();
+        Path rentalStorageLocation = getUserFileStorageLocation().resolve("rental").toAbsolutePath().normalize();
         try {
             Files.createDirectories(userFileStorageLocation);
+            Files.createDirectories(workStorageLocation);
+            Files.createDirectories(saleStorageLocation);
+            Files.createDirectories(creditStorageLocation);
+            Files.createDirectories(cooperationStorageLocation);
+            Files.createDirectories(rentalStorageLocation);
         } catch (Exception ex) {
             throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
         }
     }
 
     @Override
-    public ResponseFile addFile(MultipartFile file, Long id_document){
+    public ResponseFile addFile(MultipartFile file, Long id_document, String kind){
         createUserDirectory();
-        Document doc = documentRepo.getOne(id_document);
+        Path targetLocation = Paths.get("");
+        DocumentPattern doc = new DocumentPattern();
+        switch (kind){
+            case "work":{
+                doc = workContractRepo.getOne(id_document);
+                break;
+            }
+            case "cooperation":{
+                doc = cooperationContractRepo.getOne(id_document);
+                break;
+            }
+            case "credit":{
+                doc = creditContractRepo.getOne(id_document);
+                break;
+            }
+            case "sale":{
+                doc = contractOfSaleRepo.getOne(id_document);
+                break;
+            }
+            case "rental":{
+                doc = rentalContractRepo.getOne(id_document);
+                break;
+            }
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd--HH-mm");
         String dateTime = LocalDateTime.now().format(formatter);
         String fileName = StringUtils.cleanPath("(" + dateTime + "--" + doc.getTitle() + ")" + file.getOriginalFilename());
@@ -62,8 +107,34 @@ public class FileStorageServiceImpl implements FileStorageService {
                 throw new RuntimeException("Sorry! Filename contains invalid path sequence " + fileName);
             }
             doc.setFilename(fileName);
-            documentRepo.save(doc);
-            Path targetLocation = getUserFileStorageLocation().resolve(fileName);
+            switch (kind){
+                case "work":{
+                    workContractRepo.save((WorkContract) doc);
+                    targetLocation = getUserFileStorageLocation().resolve(kind).resolve(fileName);
+                    break;
+                }
+                case "cooperation":{
+                    cooperationContractRepo.save((CooperationContract) doc);
+                    targetLocation = getUserFileStorageLocation().resolve(kind).resolve(fileName);
+                    break;
+                }
+                case "credit":{
+                    creditContractRepo.save((CreditContract) doc);
+                    targetLocation = getUserFileStorageLocation().resolve(kind).resolve(fileName);
+                    break;
+                }
+                case "sale":{
+                    contractOfSaleRepo.save((ContractOfSale) doc);
+                    targetLocation = getUserFileStorageLocation().resolve(kind).resolve(fileName);
+                    break;
+                }
+                case "rental":{
+                    rentalContractRepo.save((RentalContract) doc);
+                    targetLocation = getUserFileStorageLocation().resolve(kind).resolve(fileName);
+                    break;
+                }
+            }
+
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             ResponseFile responseFile = new ResponseFile(fileName, file.getOriginalFilename(), file.getContentType(), file.getSize());
             return responseFile;
@@ -75,17 +146,64 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public Resource loadFileAsResource(String fileName){
+    public Resource loadFileAsResource(String fileName, String kind){
         try {
-            Document doc = documentRepo.findByFilename(fileName).get();
-            Path filePath = getUserFileStorageLocation().resolve(fileName).normalize();
+            Path filePath = Paths.get("");
+            DocumentPattern doc = new DocumentPattern();
+            switch (kind){
+                case "work":{
+                    doc = workContractRepo.findByFilename(fileName).get();
+                    filePath = getUserFileStorageLocation().resolve(kind).resolve(fileName).normalize();
+                    break;
+                }
+                case "cooperation":{
+                    doc = cooperationContractRepo.findByFilename(fileName).get();
+                    filePath = getUserFileStorageLocation().resolve(kind).resolve(fileName).normalize();
+                    break;
+                }
+                case "credit":{
+                    doc = creditContractRepo.findByFilename(fileName).get();
+                    filePath = getUserFileStorageLocation().resolve(kind).resolve(fileName).normalize();
+                    break;
+                }
+                case "sale":{
+                    doc = contractOfSaleRepo.findByFilename(fileName).get();
+                    filePath = getUserFileStorageLocation().resolve(kind).resolve(fileName).normalize();
+                    break;
+                }
+                case "rental":{
+                    doc = rentalContractRepo.findByFilename(fileName).get();
+                    filePath = getUserFileStorageLocation().resolve(kind).resolve(fileName).normalize();
+                    break;
+                }
+            }
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return resource;
             } else {
                 doc.setFilename(null);
-                documentRepo.save(doc);
-                System.out.println("title is " + doc.getTitle());
+                switch (kind){
+                    case "work":{
+                        workContractRepo.save((WorkContract) doc);
+                        break;
+                    }
+                    case "cooperation":{
+                        cooperationContractRepo.save((CooperationContract) doc);
+                        break;
+                    }
+                    case "credit":{
+                        creditContractRepo.save((CreditContract) doc);
+                        break;
+                    }
+                    case "sale":{
+                        contractOfSaleRepo.save((ContractOfSale) doc);
+                        break;
+                    }
+                    case "rental":{
+                        rentalContractRepo.save((RentalContract) doc);
+                        break;
+                    }
+                }
                 throw new NoSuchFileException("File not found " + fileName);
             }
         } catch (MalformedURLException ex) {
@@ -96,10 +214,66 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public void deleteFile(Document document){
-        Path path = Paths.get(getUserFileStorageLocation() + "\\" + document.getFilename()).toAbsolutePath().normalize();
-        document.setFilename(null);
-        documentRepo.save(document);
+    public void deleteFile(String fileName, String kind){
+        DocumentPattern doc = new DocumentPattern();
+        switch (kind) {
+            case "work": {
+                doc = workContractRepo.findByFilename(fileName).get();
+                break;
+            }
+            case "cooperation": {
+                doc = cooperationContractRepo.findByFilename(fileName).get();
+                break;
+            }
+            case "credit": {
+                doc = creditContractRepo.findByFilename(fileName).get();
+                break;
+            }
+            case "sale": {
+                doc = contractOfSaleRepo.findByFilename(fileName).get();
+                break;
+            }
+            case "rental": {
+                doc = rentalContractRepo.findByFilename(fileName).get();
+                break;
+            }
+        }
+        Path path = Paths.get("");
+
+        System.out.println("do  -----------  " + doc.getFilename());
+
+        switch (kind){
+            case "work":{
+                path = Paths.get(getUserFileStorageLocation() + "\\" + kind +"\\" + doc.getFilename()).toAbsolutePath().normalize();
+                doc.setFilename(null);
+                workContractRepo.save((WorkContract) doc);
+                 break;
+            }
+            case "cooperation":{
+                path = Paths.get(getUserFileStorageLocation() + "\\" + kind +"\\" + doc.getFilename()).toAbsolutePath().normalize();
+                doc.setFilename(null);
+                cooperationContractRepo.save((CooperationContract) doc);
+                break;
+            }
+            case "credit":{
+                path = Paths.get(getUserFileStorageLocation() + "\\" + kind +"\\" + doc.getFilename()).toAbsolutePath().normalize();
+                doc.setFilename(null);
+                creditContractRepo.save((CreditContract) doc);
+                 break;
+            }
+            case "sale":{
+                path = Paths.get(getUserFileStorageLocation() + "\\" + kind +"\\" + doc.getFilename()).toAbsolutePath().normalize();
+                doc.setFilename(null);
+                contractOfSaleRepo.save((ContractOfSale) doc);
+                break;
+            }
+            case "rental":{
+                path = Paths.get(getUserFileStorageLocation() + "\\" + kind +"\\" + doc.getFilename()).toAbsolutePath().normalize();
+                doc.setFilename(null);
+                rentalContractRepo.save((RentalContract) doc);
+                 break;
+            }
+        }
         try {
             Files.delete(path);
         } catch (IOException e) {

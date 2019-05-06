@@ -1,14 +1,18 @@
 package com.innowise.document.controller.documents;
 
-import com.innowise.document.entity.documents.RentalContract;
+import com.innowise.document.entity.FilterObject;
 import com.innowise.document.entity.documents.WorkContract;
 import com.innowise.document.service.documents.DocumentService;
+import com.innowise.document.service.documents.WorkContractServiceImpl;
+import com.innowise.document.service.filters.FilterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,12 @@ public class WorkContractController {
 
     @Autowired
     DocumentService<WorkContract> workContractService;
+
+    @Autowired
+    WorkContractServiceImpl workContractServiceImpl;
+
+    @Autowired
+    FilterService<WorkContract> filterService;
 
 
     @GetMapping("get/{id}")
@@ -44,7 +54,7 @@ public class WorkContractController {
 
     @PostMapping("add/{username}")
     public ResponseEntity<WorkContract> addByUserId(@PathVariable("username") String username, @RequestBody WorkContract doc) {
-        WorkContract workContract = workContractService.addByUsername(username, doc);
+        WorkContract workContract = workContractServiceImpl.addByUsername(username, doc);
         return new ResponseEntity<>(workContract, HttpStatus.CREATED);
     }
 
@@ -71,5 +81,12 @@ public class WorkContractController {
     public ResponseEntity<Void> deleteAll() {
         workContractService.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("page/get")
+    public ResponseEntity<Page<WorkContract>> getAllByUsername(
+            @RequestBody FilterObject obj, @RequestParam int page, @RequestParam int size) throws ParseException{
+        Page<WorkContract> cooperationContractList = filterService.findAllByFilter(obj, page, size);
+        return new ResponseEntity<>(cooperationContractList, HttpStatus.OK);
     }
 }

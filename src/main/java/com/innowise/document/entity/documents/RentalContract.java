@@ -1,14 +1,9 @@
 package com.innowise.document.entity.documents;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Data
@@ -17,8 +12,9 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "rental_contract")
-public class RentalContract extends DocumentPattern{ //аренда
+public class RentalContract extends DocumentPattern { //аренда
 
+    @NotBlank
     private String rentalObject;
 
     @Temporal(TemporalType.DATE)
