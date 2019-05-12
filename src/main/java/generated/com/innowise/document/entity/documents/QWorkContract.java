@@ -45,15 +45,14 @@ public class QWorkContract extends EntityPathBase<WorkContract> {
     public final BooleanPath isActive;
 
     //inherited
-    public final StringPath kind;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> lastChange;
 
     public final com.innowise.document.entity.QCatalogOfOperationMode operationMode;
 
     //inherited
     public final StringPath otherInfo;
+
+    public final StringPath placeOfWork = createString("placeOfWork");
 
     public final StringPath position = createString("position");
 
@@ -96,7 +95,6 @@ public class QWorkContract extends EntityPathBase<WorkContract> {
         this.filename = _super.filename;
         this.id = _super.id;
         this.isActive = _super.isActive;
-        this.kind = _super.kind;
         this.lastChange = _super.lastChange;
         this.operationMode = inits.isInitialized("operationMode") ? new com.innowise.document.entity.QCatalogOfOperationMode(forProperty("operationMode")) : null;
         this.otherInfo = _super.otherInfo;

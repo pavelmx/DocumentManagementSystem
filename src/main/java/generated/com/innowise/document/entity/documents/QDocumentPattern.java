@@ -34,8 +34,6 @@ public class QDocumentPattern extends EntityPathBase<DocumentPattern> {
 
     public final BooleanPath isActive = createBoolean("isActive");
 
-    public final StringPath kind = createString("kind");
-
     public final DateTimePath<java.time.LocalDateTime> lastChange = createDateTime("lastChange", java.time.LocalDateTime.class);
 
     public final StringPath otherInfo = createString("otherInfo");

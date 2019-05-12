@@ -26,8 +26,6 @@ public class DocumentPattern implements Serializable {
 
     protected String title;
 
-    protected String kind;
-
     protected String filename;
 
     protected String clientFullName;

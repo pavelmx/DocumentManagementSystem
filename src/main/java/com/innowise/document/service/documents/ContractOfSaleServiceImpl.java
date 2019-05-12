@@ -54,7 +54,7 @@ public class ContractOfSaleServiceImpl implements DocumentService<ContractOfSale
                     throw new EntityExistsException("ContractOfSale with title: '" + contractOfSale.getTitle() + "' exists.");
             }
         }
-        contractOfSale.setKind("Contract of sale");
+
         contractOfSale.setDateOfCreation(Date.valueOf(LocalDate.now()));
         setActiveStatus(contractOfSale);
         contractOfSale.setUser(userRepo.findByUsername(username).get());

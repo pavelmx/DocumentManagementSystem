@@ -21,6 +21,9 @@ public class WorkContract extends DocumentPattern {
     private Integer term;
 
     @NotBlank
+    private String placeOfWork;
+
+    @NotBlank
     private String position;
 
     @ManyToOne

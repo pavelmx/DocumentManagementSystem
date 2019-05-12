@@ -54,7 +54,7 @@ public class RentalContractServiceImpl implements DocumentService<RentalContract
                     throw new EntityExistsException("RentalContract with title: '" + rentalContract.getTitle() + "' exists.");
             }
         }
-        rentalContract.setKind("Rental contract");
+
         rentalContract.setDateOfCreation(Date.valueOf(LocalDate.now()));
         setActiveStatus(rentalContract);
         rentalContract.setUser(userRepo.findByUsername(username).get());

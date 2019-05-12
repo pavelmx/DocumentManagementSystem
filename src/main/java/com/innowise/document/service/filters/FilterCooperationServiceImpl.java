@@ -57,9 +57,17 @@ public class FilterCooperationServiceImpl implements FilterService<CooperationCo
         }
         if (!StringUtils.isEmpty(obj.getIsActive())) {
             booleanBuilder.and(qdocument._super.isActive.eq(Boolean.valueOf(obj.getIsActive())));
-            System.out.println("exp " + obj.getIsActive());
         }
-
+        if (!StringUtils.isEmpty(obj.getKindOfActivity())) {
+            booleanBuilder.and(qdocument.kindOfActivity.containsIgnoreCase(obj.getKindOfActivity()));
+        }
+        if (obj.getFromCooperationTerm() != null && obj.getToCooperationTerm() != null) {
+            booleanBuilder.and(qdocument.term.between(obj.getFromCooperationTerm(), obj.getToCooperationTerm()));
+        }else if (obj.getFromCooperationTerm() != null) {
+            booleanBuilder.and(qdocument.term.goe(obj.getFromCooperationTerm()));
+        }else if(obj.getToCooperationTerm() != null){
+            booleanBuilder.and(qdocument.term.loe(obj.getToCooperationTerm()));
+        }
         return booleanBuilder.getValue();
     }
 }

@@ -40,11 +40,9 @@ public class FilterRentalServiceImpl implements FilterService<RentalContract>{
         if (!StringUtils.isEmpty(obj.getTitle())) {
             booleanBuilder.and(qdocument.title.containsIgnoreCase(obj.getTitle()));
         }
-
         if (!StringUtils.isEmpty(obj.getClientFullname())) {
             booleanBuilder.and(qdocument.clientFullName.containsIgnoreCase(obj.getClientFullname()));
         }
-
         if (!StringUtils.isEmpty(obj.getUsername()) && obj.getUsername() != null) {
             booleanBuilder.and(qdocument.user.username.containsIgnoreCase(obj.getUsername()));
         }
@@ -61,7 +59,28 @@ public class FilterRentalServiceImpl implements FilterService<RentalContract>{
             booleanBuilder.and(qdocument._super.isActive.eq(Boolean.valueOf(obj.getIsActive())));
             System.out.println("exp " + obj.getIsActive());
         }
-
+        if (obj.getFromRentalPrice() != null && obj.getToRentalPrice() != null) {
+            booleanBuilder.and(qdocument.rentalPrice.between(obj.getFromRentalPrice(), obj.getToRentalPrice()));
+        }else if (obj.getFromRentalPrice() != null) {
+            booleanBuilder.and(qdocument.rentalPrice.goe(obj.getFromRentalPrice()));
+        }else if(obj.getToRentalPrice() != null){
+            booleanBuilder.and(qdocument.rentalPrice.loe(obj.getToRentalPrice()));
+        }
+//        if (!StringUtils.isEmpty(obj.getFromRental()) && !StringUtils.isEmpty(obj.getToRental())) {
+//            booleanBuilder.and(qdocument.dateOfCreation.between(
+//                    new SimpleDateFormat("yyyy-MM-dd").parse(obj.getFromRental()),
+//                    new SimpleDateFormat("yyyy-MM-dd").parse(obj.getToRental())));
+//        }else
+            if (!StringUtils.isEmpty(obj.getFromRental())) {
+            booleanBuilder.and(qdocument.startRental.after(Date.valueOf(LocalDate.parse(obj.getFromRental()).minusDays(1).toString())));
+        }
+//            else
+            if(!StringUtils.isEmpty(obj.getToRental())){
+            booleanBuilder.and(qdocument.endRental.before(Date.valueOf(LocalDate.parse(obj.getToRental()).plusDays(1).toString())));
+        }
+        if (!StringUtils.isEmpty(obj.getRentalObject())) {
+            booleanBuilder.and(qdocument.rentalObject.containsIgnoreCase(obj.getRentalObject()));
+        }
         return booleanBuilder.getValue();
     }
 }

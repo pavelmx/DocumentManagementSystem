@@ -59,9 +59,20 @@ public class FilterWorkServiceImpl implements FilterService<WorkContract>{
         }
         if (!StringUtils.isEmpty(obj.getIsActive())) {
             booleanBuilder.and(qdocument._super.isActive.eq(Boolean.valueOf(obj.getIsActive())));
-            System.out.println("exp " + obj.getIsActive());
         }
-
+        if (!StringUtils.isEmpty(obj.getPlaceOfWork())) {
+            booleanBuilder.and(qdocument.placeOfWork.containsIgnoreCase(obj.getPlaceOfWork()));
+        }
+        if (!StringUtils.isEmpty(obj.getPosition())) {
+            booleanBuilder.and(qdocument.position.containsIgnoreCase(obj.getPosition()));
+        }
+        if (obj.getFromSalary() != null && obj.getToSalary() != null) {
+            booleanBuilder.and(qdocument.salary.between(obj.getFromSalary(), obj.getToSalary()));
+        }else if (obj.getFromSalary() != null) {
+            booleanBuilder.and(qdocument.salary.goe(obj.getFromSalary()));
+        }else if(obj.getToSalary() != null){
+            booleanBuilder.and(qdocument.salary.loe(obj.getToSalary()));
+        }
         return booleanBuilder.getValue();
     }
 }

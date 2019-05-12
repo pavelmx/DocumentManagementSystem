@@ -54,7 +54,7 @@ public class CooperationContractServiceImpl implements DocumentService<Cooperati
                     throw new EntityExistsException("CooperationContract with title: '" + cooperationContract.getTitle() + "' exists.");
             }
         }
-        cooperationContract.setKind("Cooperation contract");
+
         cooperationContract.setDateOfCreation(Date.valueOf(LocalDate.now()));
         setActiveStatus(cooperationContract);
         cooperationContract.setUser(userRepo.findByUsername(username).get());

@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
         String jwt = jwtProvider.generateJwtToken(authentication);
         UserDetails user = (UserDetails) authentication.getPrincipal();
         if (user.isAccountNonLocked())
-            return new JwtResponse(jwt, user.getUsername(), user.getAuthorities());
+            return new JwtResponse(jwt, user.getUsername(), user.getAuthorities(), jwtProvider.getExpirationFromJwtToken(jwt));
         else
             return null;
     }

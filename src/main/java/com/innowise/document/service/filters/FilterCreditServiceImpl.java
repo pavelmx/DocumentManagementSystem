@@ -59,9 +59,28 @@ public class FilterCreditServiceImpl implements FilterService<CreditContract>{
         }
         if (!StringUtils.isEmpty(obj.getIsActive())) {
             booleanBuilder.and(qdocument._super.isActive.eq(Boolean.valueOf(obj.getIsActive())));
-            System.out.println("exp " + obj.getIsActive());
         }
-
+        if (obj.getFromTerm() != null && obj.getToTerm() != null) {
+            booleanBuilder.and(qdocument.term.between(obj.getFromTerm(), obj.getToTerm()));
+        }else if (obj.getFromTerm() != null) {
+            booleanBuilder.and(qdocument.term.goe(obj.getFromTerm()));
+        }else if(obj.getToTerm() != null){
+            booleanBuilder.and(qdocument.term.loe(obj.getToTerm()));
+        }
+        if (obj.getFromAnnualInterest() != null && obj.getToAnnualInterest() != null) {
+            booleanBuilder.and(qdocument.annualInterest.between(obj.getFromAnnualInterest(), obj.getToAnnualInterest()));
+        }else if (obj.getFromAnnualInterest() != null) {
+            booleanBuilder.and(qdocument.annualInterest.goe(obj.getFromAnnualInterest()));
+        }else if(obj.getToAnnualInterest() != null){
+            booleanBuilder.and(qdocument.annualInterest.loe(obj.getToAnnualInterest()));
+        }
+        if (obj.getFromCreditAmount() != null && obj.getToCreditAmount() != null) {
+            booleanBuilder.and(qdocument.creditAmount.between(obj.getFromCreditAmount(), obj.getToCreditAmount()));
+        }else if (obj.getFromCreditAmount() != null) {
+            booleanBuilder.and(qdocument.creditAmount.goe(obj.getFromCreditAmount()));
+        }else if(obj.getToCreditAmount() != null){
+            booleanBuilder.and(qdocument.creditAmount.loe(obj.getToCreditAmount()));
+        }
         return booleanBuilder.getValue();
     }
 }

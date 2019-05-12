@@ -47,9 +47,6 @@ public class QCreditContract extends EntityPathBase<CreditContract> {
     public final BooleanPath isActive;
 
     //inherited
-    public final StringPath kind;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> lastChange;
 
     //inherited
@@ -88,7 +85,6 @@ public class QCreditContract extends EntityPathBase<CreditContract> {
         this.filename = _super.filename;
         this.id = _super.id;
         this.isActive = _super.isActive;
-        this.kind = _super.kind;
         this.lastChange = _super.lastChange;
         this.otherInfo = _super.otherInfo;
         this.title = _super.title;

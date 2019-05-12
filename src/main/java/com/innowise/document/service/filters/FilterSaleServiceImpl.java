@@ -61,7 +61,23 @@ public class FilterSaleServiceImpl implements FilterService<ContractOfSale>{
             booleanBuilder.and(qdocument._super.isActive.eq(Boolean.valueOf(obj.getIsActive())));
             System.out.println("exp " + obj.getIsActive());
         }
-
+        if (!StringUtils.isEmpty(obj.getSaleObject())) {
+            booleanBuilder.and(qdocument.saleObject.containsIgnoreCase(obj.getSaleObject()));
+        }
+        if (obj.getFromSalingPrice() != null && obj.getToSalingPrice() != null) {
+            booleanBuilder.and(qdocument.salingPrice.between(obj.getFromSalingPrice(), obj.getToSalingPrice()));
+        }else if (obj.getFromSalingPrice() != null) {
+            booleanBuilder.and(qdocument.salingPrice.goe(obj.getFromSalingPrice()));
+        }else if(obj.getToSalingPrice() != null){
+            booleanBuilder.and(qdocument.salingPrice.loe(obj.getToSalingPrice()));
+        }
+        if (obj.getFromWarrantyPeriod() != null && obj.getToWarrantyPeriod() != null) {
+            booleanBuilder.and(qdocument.warrantyPeriod.between(obj.getFromWarrantyPeriod(), obj.getToWarrantyPeriod()));
+        }else if (obj.getFromWarrantyPeriod() != null) {
+            booleanBuilder.and(qdocument.warrantyPeriod.goe(obj.getFromWarrantyPeriod()));
+        }else if(obj.getToWarrantyPeriod() != null){
+            booleanBuilder.and(qdocument.warrantyPeriod.loe(obj.getToWarrantyPeriod()));
+        }
         return booleanBuilder.getValue();
     }
 }

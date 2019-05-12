@@ -54,7 +54,7 @@ public class CreditContractServiceimpl implements DocumentService<CreditContract
                     throw new EntityExistsException("CreditContract with title: '" + creditContract.getTitle() + "' exists.");
             }
         }
-        creditContract.setKind("Credit contract");
+
         creditContract.setDateOfCreation(Date.valueOf(LocalDate.now()));
         setActiveStatus(creditContract);
         creditContract.setUser(userRepo.findByUsername(username).get());

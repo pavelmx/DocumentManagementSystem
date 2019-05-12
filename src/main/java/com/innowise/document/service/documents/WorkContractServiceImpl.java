@@ -60,7 +60,6 @@ public class WorkContractServiceImpl implements DocumentService<WorkContract>{
                     throw new EntityExistsException("WorkContract with title: '" + workContract.getTitle() + "' exists.");
             }
         }
-        workContract.setKind("Work contract");
         workContract.setDateOfCreation(Date.valueOf(LocalDate.now()));
         workContract.setActive(true);
         workContract.setUser(userRepo.findByUsername(username).get());

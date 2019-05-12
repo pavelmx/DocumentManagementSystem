@@ -82,7 +82,7 @@ public class CooperationContractController {
     @PostMapping("page/get")
     public ResponseEntity<Page<CooperationContract>> getAllByUsername(
             @RequestBody FilterObject obj, @RequestParam int page, @RequestParam int size) throws ParseException{
-        Page<CooperationContract> cooperationContractList = filterService.findAllByFilter(obj, page, size);
-        return new ResponseEntity<>(cooperationContractList, HttpStatus.OK);
+        Page<CooperationContract> contractList = filterService.findAllByFilter(obj, page, size);
+        return new ResponseEntity<>(contractList, HttpStatus.OK);
     }
 }
