@@ -3,6 +3,7 @@ package com.innowise.document.security;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 import io.jsonwebtoken.*;
@@ -20,6 +21,14 @@ public class JwtProvider {
     @Value("${auth.jwtExpiration}")
     private int jwtExpiration;
 
+    private Date addDays(Date date, int days)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days);
+        return cal.getTime();
+    }
+
     public String generateJwtToken(Authentication authentication) {
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -27,7 +36,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpiration * 365 * 1000))
+                .setExpiration(addDays(new Date(), (jwtExpiration / 3600 / 24) * 365))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
