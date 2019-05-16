@@ -1,14 +1,11 @@
-package com.innowise.document;
+package com.innowise.document.unit;
 
 import com.innowise.document.entity.Role;
 import com.innowise.document.entity.User;
 import com.innowise.document.repository.RoleRepo;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.security.RegisterForm;
-import com.innowise.document.service.RoleService;
-import com.innowise.document.service.RoleServiseImpl;
-import com.innowise.document.service.UserService;
-import com.innowise.document.service.UserServiceImpl;
+import com.innowise.document.service.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +33,13 @@ public class UserServiceTests {
     private UserRepo mockUserRepository;
 
     @Mock
+    private RoleServiseImpl mockRoleService;
+
+    @Mock
     private BCryptPasswordEncoder mockBCryptPasswordEncoder;
+
+    @Mock
+    private MailSenderServiceImpl mailSenderService;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -48,7 +51,7 @@ public class UserServiceTests {
         initMocks(this);
         Set< Role > roles = new HashSet<>();
         user = new User(1L, "testuser", "user12345",
-                mockBCryptPasswordEncoder.encode("123456"), "test@user.com","code", "adress", roles);
+               "123456", "test@user.com","code", "adress", roles);
     }
 
     @Test
@@ -69,29 +72,30 @@ public class UserServiceTests {
 
     @Test
     public void testSignUpUser() {
+        Role role = new Role();
+        Mockito.when(mockRoleService.findByName(any())).thenReturn(role);
         Mockito.when(mockUserRepository.save(any())).thenReturn(user);
-         String name = "user12345";
-         String username = "testuser";
-         String email = "test@user.com";
-         String password = "123456";
+        String name = "user12345";
+        String username = "testuser";
+        String email = "test@user.com";
+        String password = "123456";
         RegisterForm registerForm = new RegisterForm(name, username, email, password);
         User result = userService.signUpUser(registerForm);
         assertEquals(email, result.getEmail());
         assertEquals(username, result.getUsername());
         assertEquals(name, result.getName());
-        assertTrue(mockBCryptPasswordEncoder.matches(password, result.getPassword()));
     }
 
     @Test
     public void testUpdateUser() {
+        Mockito.when(mockUserRepository.existsById(any())).thenReturn(true);
+        Mockito.when(mockUserRepository.findById(any())).thenReturn(java.util.Optional.ofNullable(user));
         Mockito.when(mockUserRepository.save(any())).thenReturn(user);
-         String name = "newuser";
-         User newuser = user;
-         newuser.setName(name);
-        User result = userService.updateUser(newuser);
-        assertEquals(user.getEmail(), result.getEmail());
-        assertEquals(name, result.getUsername());
-        assertTrue(mockBCryptPasswordEncoder.matches(user.getPassword(), result.getPassword()));
+        String name = "user12345";
+        String email = "test@user.com";
+        User result = userService.updateUser(user);
+        assertEquals(email, result.getEmail());
+        assertEquals(name, result.getName());
     }
 
     @Test

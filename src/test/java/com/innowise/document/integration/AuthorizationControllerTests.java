@@ -1,9 +1,10 @@
-package com.innowise.document;
+package com.innowise.document.integration;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innowise.document.DocumentManagementSystemApplication;
 import com.innowise.document.entity.User;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.security.JwtResponse;

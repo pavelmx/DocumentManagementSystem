@@ -1,4 +1,4 @@
-package com.innowise.document;
+package com.innowise.document.unit;
 
 import com.innowise.document.entity.CatalogOfOperationMode;
 import com.innowise.document.entity.Role;
@@ -98,6 +98,8 @@ public class DocumentServiceTests {
 
     @Test
     public void testAddByUsername() {
+        Mockito.when(mockUserRepo.existsByUsername(any())).thenReturn(true);
+        Mockito.when(mockUserRepo.findByUsername(any())).thenReturn(java.util.Optional.ofNullable(user));
         Mockito.when(mockWorkContractRepo.save(any())).thenReturn(workContract1);
         WorkContract result = workContractDocumentService.addByUsername(user.getUsername(), workContract1);
         assertEquals(user.getUsername(), result.getUser().getUsername());
@@ -105,8 +107,11 @@ public class DocumentServiceTests {
 
     @Test
     public void testUpdateByUsername() {
+        Mockito.when(mockWorkContractRepo.existsById(any())).thenReturn(true);
+        Mockito.when(mockUserRepo.existsByUsername(any())).thenReturn(true);
         Mockito.when(mockWorkContractRepo.save(any())).thenReturn(workContract1);
-        String username = "admin";
+        Mockito.when(mockUserRepo.findByUsername(any())).thenReturn(java.util.Optional.ofNullable(user));
+        String username = "testuser";
         WorkContract result = workContractDocumentService.updateByUsername(username, workContract1);
         assertEquals(username, result.getUser().getUsername());
     }

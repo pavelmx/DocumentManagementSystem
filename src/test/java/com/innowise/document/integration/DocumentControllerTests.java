@@ -1,4 +1,4 @@
-package com.innowise.document;
+package com.innowise.document.integration;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;

@@ -50,13 +50,14 @@ public class FilterUserServiceImpl implements FilterService<User> {
             booleanBuilder.and(quser.username.toLowerCase().contains(filterEntity.getUsername().toLowerCase()));
         }
         //activationCode
-        if (filterEntity.getActivationCode().equals("confirm")) {
-            booleanBuilder.and(quser.activationCode.isNull());
+        if (!StringUtils.isEmpty(filterEntity.getActivationCode())) {
+            if (filterEntity.getActivationCode().equals("confirm")) {
+                booleanBuilder.and(quser.activationCode.isNull());
+            }
+            if (filterEntity.getActivationCode().equals("notconfirm")) {
+                booleanBuilder.and(quser.activationCode.isNotNull());
+            }//ROLE_USER
         }
-        if (filterEntity.getActivationCode().equals("notconfirm")) {
-            booleanBuilder.and(quser.activationCode.isNotNull());
-        }//ROLE_USER
-
         booleanBuilder.and(quser.roles.contains(roleRepo.findByName(RoleName.ROLE_USER).get()));
 
         return booleanBuilder.getValue();

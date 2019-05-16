@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
-    private final Path fileStorageLocation;
+    //private final Path fileStorageLocation;
 
     @Autowired
     WorkContractRepo workContractRepo;
@@ -41,19 +41,22 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Autowired
     FileStorage fileStorage;
 
-    @Autowired
-    public FileStorageServiceImpl(FileStorage fileStorage){
-        this.fileStorageLocation = Paths.get(fileStorage.getUploadDir())
-                .toAbsolutePath().normalize();
-        try {
-            Files.createDirectories(this.fileStorageLocation);
-        } catch (Exception ex) {
-            throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
-        }
-    }
+//    @Autowired
+////    public FileStorageServiceImpl(FileStorage fileStorage){
+////        this.fileStorageLocation = Paths.get(fileStorage.getUploadDir())
+////                .toAbsolutePath().normalize();
+////        try {
+////            Files.createDirectories(this.fileStorageLocation);
+////        } catch (Exception ex) {
+////            throw new RuntimeException("Could not create the directory where the uploaded files will be stored.", ex);
+////        }
+////    }
 
 
     private void createUserDirectory(){
+        Path fileStorageLocation = Paths.get(fileStorage.getUploadDir())
+              .toAbsolutePath().normalize();
+
         Path userFileStorageLocation = getUserFileStorageLocation().toAbsolutePath().normalize();
         Path workStorageLocation = getUserFileStorageLocation().resolve("work").toAbsolutePath().normalize();
         Path saleStorageLocation = getUserFileStorageLocation().resolve("sale").toAbsolutePath().normalize();
@@ -61,6 +64,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         Path cooperationStorageLocation = getUserFileStorageLocation().resolve("cooperation").toAbsolutePath().normalize();
         Path rentalStorageLocation = getUserFileStorageLocation().resolve("rental").toAbsolutePath().normalize();
         try {
+            Files.createDirectories(fileStorageLocation);
             Files.createDirectories(userFileStorageLocation);
             Files.createDirectories(workStorageLocation);
             Files.createDirectories(saleStorageLocation);

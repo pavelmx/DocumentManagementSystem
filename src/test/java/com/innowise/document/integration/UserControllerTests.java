@@ -1,13 +1,16 @@
-package com.innowise.document;
+package com.innowise.document.integration;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.innowise.document.DocumentManagementSystemApplication;
 import com.innowise.document.entity.User;
+import com.innowise.document.repository.UserRepo;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -37,6 +40,9 @@ public class UserControllerTests {
     private MockMvc mvc;
 
     @Autowired
+    private UserRepo userRepo;
+
+    @Autowired
     WebApplicationContext webApplicationContext;
 
     @Before
@@ -61,7 +67,7 @@ public class UserControllerTests {
 
 
 
-    @WithMockUser(value = "admin", password = "123456")
+    @WithMockUser
     @Test
     public void testGetUserById() throws Exception {
         String uri = "/user/get/{id}";
@@ -72,7 +78,7 @@ public class UserControllerTests {
         assertEquals(200, status);
     }
 
-    @WithMockUser(value = "admin", password = "123456")
+    @WithMockUser
     @Test
     public void testFindUserByUsername() throws Exception {
         String uri = "/user/username/{username}";
@@ -83,7 +89,7 @@ public class UserControllerTests {
         assertEquals(200, status);
     }
 
-    @WithMockUser(value = "admin", password = "123456", roles = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     @Test
     public void testFindUserByEmail() throws Exception {
         String uri = "/user/email/{email}";
@@ -96,7 +102,7 @@ public class UserControllerTests {
 
 
 
-    @WithMockUser(value = "admin", password = "123456", roles = "ADMIN")
+    @WithMockUser(roles = "ADMIN")
     @Test
     public void testGetUsersList() throws Exception {
         String uri = "/user/getall";
@@ -110,5 +116,14 @@ public class UserControllerTests {
         assertTrue(userList.length > 0);
     }
 
+    @WithMockUser(roles = "ADMIN")
+    @Test
+    public void testDeleteUser() throws Exception {
+        String uri = "/user/delete/{id}";
+        User user = userRepo.save(new User( "usergwname", "namee", "123ge456","emegwail@email"));
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.delete(uri, user.getId())).andReturn();
+        int status = mvcResult.getResponse().getStatus();
+        assertEquals(200, status);
 
+    }
 }
