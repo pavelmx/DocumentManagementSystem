@@ -36,6 +36,9 @@ dependencies {
     
     compile 'com.querydsl:querydsl-apt:4.1.4:jpa'
     compile 'com.querydsl:querydsl-jpa:4.1.4'
+
+    compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    compile group: 'org.apache.directory.studio', name: 'org.apache.commons.io', version: '2.4'
     
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
