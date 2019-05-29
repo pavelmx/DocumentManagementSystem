@@ -69,8 +69,8 @@ public class HomePageTest extends AbstractWebTest{
         emailElement.sendKeys("email@test");
         WebElement nameElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(REGISTER_NAME_ID)));
         nameElement.sendKeys("test name");
-        WebElement loginButtonElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(REGISTER_ID)));
-        loginButtonElement.click();
+        WebElement regButtonElement  = wait.until(ExpectedConditions.elementToBeClickable(By.id(REGISTER_ID)));
+        regButtonElement .click();
     }
 
 

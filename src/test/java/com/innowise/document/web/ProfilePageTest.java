@@ -27,11 +27,11 @@ public class ProfilePageTest extends AbstractWebTest {
     }
 
     @Test
-    public void testFiterWorkDoc() throws IOException{
+    public void testChangeProfile() throws IOException{
         WebElement nameElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(NAME_ID)));
-        nameElement.sendKeys("new name");
+        nameElement.sendKeys(" new");
         WebElement adressElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(ADRESS_ID)));
-        adressElement.sendKeys("new adress");
+        adressElement.sendKeys(" new");
         WebElement newPasswordElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(NEW_PASSWORD_ID)));
         newPasswordElement.sendKeys("1234567");
         WebElement updateElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(BUTTON_UPDATE_ID)));

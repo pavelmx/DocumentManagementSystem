@@ -38,7 +38,7 @@ public class DocumentCreatePageTest extends AbstractWebTest {
     }
 
     @Test
-    public void testFiterWorkDoc() throws IOException{
+    public void testCreateLeaseDoc() throws IOException{
         WebElement filterActiveElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(LEASE_LINK_ID)));
         filterActiveElement.click();
         WebElement titleElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(TITLE_ID)));
@@ -52,9 +52,9 @@ public class DocumentCreatePageTest extends AbstractWebTest {
         WebElement priceElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(PRICE_ID)));
         priceElement.sendKeys("1522");
         WebElement startElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(START_ID)));
-        startElement.sendKeys("2019-05-30");
+        startElement.sendKeys("30-05-2019");
         WebElement endElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(END_ID)));
-        endElement.sendKeys("2019-10-30");
+        endElement.sendKeys("30-10-2019");
         WebElement otherElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(OTHER_ID)));
         otherElement.sendKeys("bla bla bla");
         WebElement addElement = wait.until(ExpectedConditions.elementToBeClickable(By.id(BUTTON_ADD_ID)));
