@@ -1,21 +1,17 @@
 package com.innowise.document.unit;
 
+import com.innowise.document.service.UserServiceImpl;
 import com.innowise.document.entity.Role;
 import com.innowise.document.entity.User;
-import com.innowise.document.repository.RoleRepo;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.security.RegisterForm;
 import com.innowise.document.service.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 import java.util.Set;

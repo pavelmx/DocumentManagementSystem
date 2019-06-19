@@ -2,7 +2,6 @@ package com.innowise.document.service;
 
 import com.innowise.document.entity.Role;
 import com.innowise.document.entity.RoleName;
-import com.innowise.document.entity.User;
 import com.innowise.document.repository.RoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

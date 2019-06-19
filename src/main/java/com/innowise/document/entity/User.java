@@ -1,6 +1,7 @@
 package com.innowise.document.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.innowise.document.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

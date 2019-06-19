@@ -1,34 +1,23 @@
 package com.innowise.document.unit;
 
 import com.innowise.document.entity.CatalogOfOperationMode;
-import com.innowise.document.entity.Role;
 import com.innowise.document.entity.User;
 import com.innowise.document.entity.documents.WorkContract;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.repository.documents.WorkContractRepo;
-import com.innowise.document.service.UserService;
-import com.innowise.document.service.UserServiceImpl;
-import com.innowise.document.service.documents.DocumentService;
 import com.innowise.document.service.documents.WorkContractServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 

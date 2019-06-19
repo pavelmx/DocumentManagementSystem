@@ -1,5 +1,6 @@
 package com.innowise.document.entity.documents;
 
+import com.innowise.document.entity.documents.DocumentPattern;
 import lombok.*;
 
 import javax.persistence.Entity;

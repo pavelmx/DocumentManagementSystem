@@ -1,8 +1,8 @@
 package com.innowise.document.service.documents;
 
 import com.innowise.document.entity.documents.CreditContract;
-import com.innowise.document.repository.UserRepo;
 import com.innowise.document.repository.documents.CreditContractRepo;
+import com.innowise.document.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

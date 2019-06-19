@@ -8,7 +8,6 @@ import com.innowise.document.repository.UserRepo;
 import com.innowise.document.service.filters.FilterUserServiceImpl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import org.assertj.core.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -20,10 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;

@@ -1,8 +1,10 @@
 package com.innowise.document.service;
 
+import com.innowise.document.entity.documents.CreditContract;
+import com.innowise.document.repository.documents.CreditContractRepo;
+import com.innowise.document.entity.User;
 import com.innowise.document.entity.Role;
 import com.innowise.document.entity.RoleName;
-import com.innowise.document.entity.User;
 import com.innowise.document.entity.documents.*;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.repository.documents.*;

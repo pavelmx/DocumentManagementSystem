@@ -1,5 +1,7 @@
 package com.innowise.document.service;
 
+import com.innowise.document.entity.documents.CreditContract;
+import com.innowise.document.repository.documents.CreditContractRepo;
 import com.innowise.document.entity.documents.*;
 import com.innowise.document.entity.file.FileStorage;
 import com.innowise.document.entity.file.ResponseFile;

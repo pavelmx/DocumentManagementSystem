@@ -21,7 +21,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
-import java.util.Date;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

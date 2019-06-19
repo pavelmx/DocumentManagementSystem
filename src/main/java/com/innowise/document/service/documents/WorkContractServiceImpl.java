@@ -1,6 +1,5 @@
 package com.innowise.document.service.documents;
 
-import com.innowise.document.entity.documents.RentalContract;
 import com.innowise.document.entity.documents.WorkContract;
 import com.innowise.document.repository.UserRepo;
 import com.innowise.document.repository.CatalogOfOperationModeRepo;
